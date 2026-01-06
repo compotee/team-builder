@@ -1,9 +1,9 @@
-import "./main-style.css"
+import "./Landing.css"
 
 import teamImage from '../../assets/main-page-img.svg';
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/team-builder-logo.svg';
 
-const Home = () => {
+const LandingPage = () => {
   return (
     <div>
       <div className="logo-div">
@@ -26,4 +26,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LandingPage;
