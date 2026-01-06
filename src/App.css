@@ -1,6 +1,29 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+  margin: 0;
+  padding: 0;
+
+  overflow-y: scroll;
+
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  color: var(--color-dark-blue);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.blue-button {
+  width: fit-content;
+  border-radius: 10px;
+  border: none;
+  padding: 16px 40px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-grey);
+  background-color: var(--color-blue);
+  cursor: pointer;
+}
+
+.blue-button:hover {
+  border-color: var(--color-dark-blue);
 }
