@@ -1,13 +1,22 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+
 import './Auth.css';
 
 import logo from '../../assets/team-builder-logo.svg';
 import authBackgroundImg from "../../assets/auth-background-img.svg"
 
 const AuthPage = () => {
-    const [isLogin, setIsLogin] = useState(true);
+    const location = useLocation();
+    
+    const getInitialIsLogin = () => {
+        const state = location.state as { isLogin?: boolean };
+        return state?.isLogin !== undefined ? state.isLogin : true;
+    };
+
+    const [isLogin, setIsLogin] = useState(getInitialIsLogin);
 
     return (
         <div className="auth-page">
