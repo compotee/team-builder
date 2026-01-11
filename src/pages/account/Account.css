@@ -1,0 +1,99 @@
+.account-page-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 125px;
+}
+
+.personal-data-container {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 24px;
+}
+
+.personal-data-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.personal-data-form_item {
+    display: flex;
+    gap: 14px;
+    width: 600px;
+    align-items: center;
+}
+
+.personal-data-form_item-label {
+    width: 200px;
+    min-width: 200px;
+    text-align: right;
+    font-size: var(--font-size-lg);
+    line-height: normal;
+}
+
+.personal-data-form_item-img {
+    width: 40px;
+}
+
+.hidden-button {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.change-password-form {
+    margin-top: 40px;
+}
+
+.right-margin-btn {
+    margin-right: 14px;
+}
+
+.competencies-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 440px;
+    height: fit-content;
+    padding: 32px 50px;
+    border-radius: 16px;
+    background-color: var(--color-grey);
+}
+
+.competencies-form_titile {
+    font-size: var(--font-size-lg);
+}
+
+.competencies-form_item {
+    display: flex;
+    gap: 14px;
+    width: 100%;
+    align-items: center;
+}
+
+.green-notification {
+    text-align: center;
+    color: #004F10;
+}
+
+.red-notification {
+    text-align: center;
+    color: #B80205;
+}
+
+.add-competence {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    width: fit-content;
+}
+
+.background-image {
+    position: fixed;
+    bottom: 80px;   
+    right: 80px; 
+    z-index: 999;
+    pointer-events: none;
+}
