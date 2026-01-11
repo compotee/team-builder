@@ -13,17 +13,40 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.blue-button {
+.button {
   width: fit-content;
   border-radius: 10px;
   border: none;
   padding: 16px 40px;
   font-weight: var(--font-weight-bold);
-  color: var(--color-grey);
-  background-color: var(--color-blue);
   cursor: pointer;
 }
 
-.blue-button:hover {
-  border-color: var(--color-dark-blue);
+.button--active {
+  color: var(--color-grey);
+  background-color: var(--color-intense-blue);
+}
+
+.button--inactive-pending {
+  color: var(--color-grey);
+  background-color: var(--color-blue);
+}
+
+.button--inactive {
+  color: #b2b2b2;
+  background-color: var(--color-grey);
+}
+
+.button--red {
+  color: var(--color-red);
+  background-color: var(--color-white);
+  border: solid 1px var(--color-red);
+}
+
+.grey-input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 20px;
+    color: var(--color-dark-blue);
+    background-color: var(--color-grey);
 }

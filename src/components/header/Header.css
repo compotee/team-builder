@@ -1,0 +1,33 @@
+.header-container {
+    padding: 28px;
+    margin-bottom: 48px;
+    background-color: var(--color-dark-blue);
+}
+
+.links-container {
+    display: flex;
+    gap: 50px;
+}
+
+.nav-item {
+    font-size: var(--font-size-lg);
+    color: var(--color-blue);
+}
+
+.nav-item-active {
+  color: var(--color-white);
+}
+
+.logo-nav {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+}
+
+.header-logo-img {
+    width: 24px;
+    margin-right: 10px;
+}
+
+.push-right {
+    margin-left: auto;
+}
