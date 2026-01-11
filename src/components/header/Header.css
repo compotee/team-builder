@@ -1,6 +1,7 @@
 .header-container {
+    position: fixed;
     padding: 28px;
-    margin-bottom: 48px;
+    width: 100%;
     background-color: var(--color-dark-blue);
 }
 
@@ -16,6 +17,7 @@
 
 .nav-item-active {
   color: var(--color-white);
+  filter: brightness(10)
 }
 
 .logo-nav {
@@ -26,8 +28,12 @@
 .header-logo-img {
     width: 24px;
     margin-right: 10px;
+    filter: brightness(10);
 }
 
 .push-right {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     margin-left: auto;
 }

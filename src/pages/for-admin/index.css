@@ -1,0 +1,22 @@
+.admin-container {
+    padding-top: 76px;
+}
+
+.admin-links-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    background-color: var(--color-grey);
+}
+
+.admin-nav-item {
+    font-size: var(--font-size-lg);
+    color: var(--color-blue);
+}
+
+.admin-nav-item-active {
+    font-size: var(--font-size-lg);
+    color: var(--color-dark-blue);
+}

@@ -9,17 +9,12 @@ const Header = () => {
   return (
     <header className='header-container'>
         <nav className='links-container'>
-            <NavLink 
-                to="/" 
-                className={({ isActive }) => 
-                    `nav-item logo-nav ${isActive ? 'nav-item-active' : ''}`
-                }
-            >
+            <div className="nav-item logo-nav">
                 <img className='header-logo-img' src={logo} alt="" />
                 TeamBuilder
-            </NavLink>
+            </div>
             <NavLink 
-                to="/make-team"
+                to="/main-page"
                 className={({ isActive }) => 
                     `nav-item ${isActive ? 'nav-item-active ' : ''}`
                 }
@@ -27,23 +22,23 @@ const Header = () => {
                 Главная страница
             </NavLink>
             <NavLink 
-                to="/make-team"
+                to="/memeber"
                 className={({ isActive }) => 
                     `nav-item ${isActive ? 'nav-item-active ' : ''}`
                 }
             >
-                Распределения
+                Для участника
             </NavLink>
             <NavLink 
-                to="/make-team"
+                to="/admin"
                 className={({ isActive }) => 
                     `nav-item ${isActive ? 'nav-item-active ' : ''}`
                 }
             >
-                Команда
+                Для администратора
             </NavLink>
             <NavLink 
-                to="/make-team"
+                to="/project-ideas"
                 className={({ isActive }) => 
                     `nav-item ${isActive ? 'nav-item-active ' : ''}`
                 }
@@ -57,7 +52,7 @@ const Header = () => {
                 }
             >
                 Личный кабинет
-                <img className='header-logo-img logo-nav' src={userIcon} alt="" />
+                <img className='account-link-img' src={userIcon} alt="" />
             </NavLink>
         </nav>
     </header>

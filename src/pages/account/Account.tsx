@@ -211,6 +211,7 @@ const AccountPage = () => {
                     </button>
                 </div>
             </form>
+            {/* Поправить картинку */}
             <div className='background-image'>
                 <img src={backgroundImage} alt="" />
             </div>
