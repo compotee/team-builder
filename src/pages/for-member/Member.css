@@ -1,0 +1,89 @@
+.member-page-container {
+    padding: 48px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.distribution-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 34px 100px 34px 34px;
+    border-radius: 20px;
+    background-color: var(--color-grey);
+
+}
+
+.distribution-card_info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.distribution-card_info-status {
+    font-size: var(--font-size-lg);
+}
+
+.distribution-card_info-project {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    width: 450px;
+}
+
+.distribution-card_info-project_title {
+    white-space: nowrap;
+}
+
+.distribution-card_info-project_text {
+    padding: 17px 26px;
+    width: 100%;
+    border-radius: 20px;
+    color: rgba(7, 17, 59, 0.5);
+    background-color: var(--color-white);
+}
+
+.join-status {
+    width: fit-content;
+    padding: 16px 40px;
+    font-weight: var(--font-weight-normal);
+    color: #004F10;
+    border-radius: 10px;
+    border: solid 1px #004F10;
+}
+
+.btns-div {
+    display: flex;
+    gap: 22px;
+}
+
+.not-join-status {
+    color: #B80205;
+}
+
+.not-join-status_link {
+    color: #B80205;
+    border-bottom: 2px solid #B80205;
+}
+
+.distribution-card_info-team-title {
+    font-size: var(--font-size-lg);
+}
+
+.distribution-card_info-competencies {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    width: 400px;
+}
+
+.distribution-card_info-competencies_item {
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: var(--color-white);
+    background-color: var(--color-blue);
+}
+
+.distribution-card_img {
+    width: 40%;
+}

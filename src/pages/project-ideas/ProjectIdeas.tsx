@@ -2,6 +2,7 @@ import "./ProjectIdeas.css"
 
 import teamImage from '../../assets/main-page-img.svg';
 
+
 const ProjectIdeasPage = () => {
   return (
     <div className="container">

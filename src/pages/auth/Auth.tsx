@@ -8,6 +8,7 @@ import './Auth.css';
 import logo from '../../assets/team-builder-logo.svg';
 import authBackgroundImg from "../../assets/auth-background-img.svg"
 
+
 const AuthPage = () => {
     const location = useLocation();
     

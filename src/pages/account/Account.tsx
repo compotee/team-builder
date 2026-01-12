@@ -8,8 +8,9 @@ import pencilIcon from "../../assets/pencil-icon.svg"
 import arrow from "../../assets/arrow.svg"
 import backgroundImage from "../../assets/account-page-img.svg"
 
+
 const AccountPage = () => {
-    const [isChangingPassword, setIsisChangingPassword] = useState(false);
+    const [isChangingPassword, setIsChangingPassword] = useState(false);
 
     return (
         <div className='account-page-container'>
@@ -125,7 +126,7 @@ const AccountPage = () => {
                 { !isChangingPassword ?
                     <button 
                         className='button button--active'
-                        onClick={() => setIsisChangingPassword(true)}
+                        onClick={() => setIsChangingPassword(true)}
                     >
                         Изменить пароль
                     </button> 
@@ -133,7 +134,7 @@ const AccountPage = () => {
                     <button 
                         // if в класс если данные в форме замены пароля не заполненны
                         className='button button--inactive-pending'
-                        onClick={() => setIsisChangingPassword(false)}
+                        onClick={() => setIsChangingPassword(false)}
                     >
                         Сохранить
                     </button>

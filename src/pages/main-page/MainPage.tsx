@@ -4,6 +4,7 @@ import "./MainPage.css"
 
 import logo from '../../assets/team-builder-logo.svg';
 
+
 const MainPage = () => {
 //   const navigate = useNavigate();
 

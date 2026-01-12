@@ -5,6 +5,7 @@ import IncomingDistributions from "./incoming-distributions/IncomingDistribution
 
 import "./index.css"
 
+
 const AdminPage = () => {
     const [activeTab, setActiveTab] = useState<'create' | 'current' | 'past'>('create');
 

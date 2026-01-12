@@ -5,6 +5,7 @@ import "./Landing.css"
 import teamImage from '../../assets/main-page-img.svg';
 import logo from '../../assets/team-builder-logo.svg';
 
+
 const LandingPage = () => {
   const navigate = useNavigate();
 

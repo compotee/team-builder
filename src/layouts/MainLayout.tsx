@@ -3,6 +3,7 @@ import Header from '../components/header/Header';
 
 import './Layouts.css';
 
+
 const MainLayout = () => {
     return (
         <>

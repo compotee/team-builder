@@ -1,5 +1,6 @@
 import "./Form.css"
 
+
 const RegisterForm = () => {
   return (
     <form className="form">

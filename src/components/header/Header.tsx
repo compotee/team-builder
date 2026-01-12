@@ -5,6 +5,7 @@ import './Header.css'
 import logo from '../../assets/team-builder-logo.svg';
 import userIcon from '../../assets/user-icon.svg'
 
+
 const Header = () => {
   return (
     <header className='header-container'>
