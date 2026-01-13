@@ -31,9 +31,11 @@ const AdminPage = () => {
                     Прошедшие распределения
                 </button>
             </nav>
-            {activeTab === 'create' && <Distribution />}
-            {activeTab === 'current' && <СurrentDistributions />}
-            {activeTab === 'past' && <IncomingDistributions />}
+            <div className='admin-container-content'>
+                {activeTab === 'create' && <Distribution />}
+                {activeTab === 'current' && <СurrentDistributions />}
+                {activeTab === 'past' && <IncomingDistributions />}
+            </div>
         </div>
     );
 };

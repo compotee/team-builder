@@ -1,0 +1,34 @@
+.current-distributions-container {
+    display: flex;
+    gap: 32px;
+    padding: 48px 64px;
+}
+
+.distributions-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 48px;
+    border-radius: 20px;
+    background-color: var(--color-grey);
+}
+
+.distributions-list_title {
+    font-size: var(--font-size-lg);
+}
+
+.distributions-list_item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.distributions-list_item-name {
+    padding: 17px;
+    width: 100%;
+    border-radius: 20px;
+    color: rgba(7, 17, 59, 0.5);
+    background-color: var(--color-white);
+}
