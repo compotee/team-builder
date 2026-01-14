@@ -1,0 +1,51 @@
+.joined-members-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 34px;
+    border-radius: 20px;
+    background-color: var(--color-grey);
+}
+
+.joined-members-container_title {
+    font-size: var(--font-size-lg);
+}
+
+.number-of-memmbers {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.number-of-memmbers_count {
+    padding: 17px 9px;
+    min-width: 100px;
+    color: rgba(7, 17, 59, 0.5);
+    border-radius: 20px;
+    background-color: var(--color-white);
+}
+
+.member-in-team {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 17px;
+    border-radius: 20px;
+    background-color: var(--color-white);
+}
+
+.member-in-team_name {
+    min-width: 300px;
+}
+
+.member-in-team_competencies {
+    display: flex;
+    gap: 10px;
+}
+
+.member-in-team_competencies-item {
+    padding: 5px 10px;
+    color: var(--color-white);
+    border-radius: 10px;
+    background-color: #C5C7C8;
+}
