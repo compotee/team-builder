@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CreatingDistribution from "./creating-distribution/CreatingDistribution";
 import JoinedMembers from "./joined-members/JoinedMembers";
-import FormedTeams from "./formed-teams/FormedTeams";
+import FormedTeams from "../components/formed-teams/FormedTeams";
 
 import "./Distribution.css"
 

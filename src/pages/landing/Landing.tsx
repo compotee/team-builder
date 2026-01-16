@@ -35,13 +35,13 @@ const LandingPage = () => {
         </p>
         <div className="landing-info-btns">
           <button 
-            className="blue-button"
+            className="button button--active"
             onClick={handleLoginClick}
           >
             Вход
           </button>
           <button 
-            className="blue-button"
+            className="button button--active"
             onClick={handleRegisterClick}
           >
             Регестрация

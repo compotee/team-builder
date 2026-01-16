@@ -1,0 +1,23 @@
+.incoming-distributions-nav {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 450px;
+    height: 100%;
+    padding: 48px 43px;
+    background-color: rgba(118, 141, 239, 0.4);
+}
+
+.incoming-distributions-nav-button {
+    text-align: left;
+    padding: 17px;
+    border-radius: 20px;
+    color: rgba(7, 17, 59, 0.5);
+    background-color: var(--color-white);
+}
+
+.incoming-distributions-content {
+    padding: 48px 48px 48px 498px;
+    width: 100%;
+}

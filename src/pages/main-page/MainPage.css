@@ -1,3 +1,37 @@
 .main-page-container {
     padding: 76px;
 }
+
+.main-page-teams-container {
+    display: flex;
+    gap: 57px;
+}
+
+.main-page-teams {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.main-page-teams-item {
+    padding: 27px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-radius: 20px;
+    background-color: var(--color-grey);
+}
+
+.main-page-teams-item-team {
+    display: flex;
+    gap: 12px;
+}
+
+.main-page-teams-item-team-title {
+    width: 100%;
+    padding: 17px;
+    border-radius: 20px;
+    color: rgba(7, 17, 59, 0.5);
+    background-color: var(--color-white);
+}

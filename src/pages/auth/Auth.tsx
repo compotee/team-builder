@@ -35,7 +35,7 @@ const AuthPage = () => {
                         Регистрация
                     </button>
                     <button 
-                         className={isLogin ? 'auth-switcher-active-btn' : 'auth-switcher-btn'}
+                        className={isLogin ? 'auth-switcher-active-btn' : 'auth-switcher-btn'}
                         onClick={() => setIsLogin(true)}
                     >
                         Вход

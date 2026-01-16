@@ -1,0 +1,15 @@
+.project-ideas-container {
+    padding: 125px;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    align-items: center;
+}
+
+.project-ideas-text {
+    font-size: var(--font-size-lg);
+}
+
+.project-ideas-img {
+    width: 50%;
+}

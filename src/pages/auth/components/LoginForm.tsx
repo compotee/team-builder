@@ -6,7 +6,7 @@ const LoginForm = () => {
     <form className="form">
       <input className="form-input" type="text" placeholder="Логин" />
       <input className="form-input" type="password" placeholder="Пароль" />
-      <button className="blue-button" type="submit">Войти</button>
+      <button className="button button--inactive-pending" type="submit">Войти</button>
     </form>
   );
 };

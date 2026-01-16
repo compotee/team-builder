@@ -3,6 +3,8 @@
 import "./MainPage.css"
 
 import logo from '../../assets/team-builder-logo.svg';
+import linkIcon from '../../assets/link-icon.svg'
+import teamImg from '../../assets/main-page-team-img.svg'
 
 
 const MainPage = () => {
@@ -24,30 +26,30 @@ const MainPage = () => {
         <p className="landing-info-text">
             Наша цель - автоматизировать формирование сбалансированных и эффективных проектных команд на основе компетенций и ролей участников.
         </p>
-        <div>
-            <div>
-                <div>
-                    <h3>Распределения, в которых я участвую</h3>
+        <div className="main-page-teams-container">
+            <div className="main-page-teams">
+                <div className="main-page-teams-item">
+                    <h3 className="main-page-teams-item-title">Распределения, в которых я участвую</h3>
                     {/* вывод в цикле */}
-                    <div>
-                        <h4>Название</h4>
-                        <button>
-                            <img src="" alt="" />
+                    <div className="main-page-teams-item-team">
+                        <div className="main-page-teams-item-team-title">Название</div>
+                        <button className="main-page-teams-item-team-btn">
+                            <img src={linkIcon} alt="" />
                         </button>
                     </div>
                 </div>
-                <div>
-                    <h3>Администрируемые мной распределения</h3>
+                <div className="main-page-teams-item">
+                    <h3 className="main-page-teams-item-title">Администрируемые мной распределения</h3>
                     {/* вывод в цикле */}
-                    <div>
-                        <h4>Название</h4>
-                        <button>
-                            <img src="" alt="" />
+                    <div className="main-page-teams-item-team">
+                        <div className="main-page-teams-item-team-title">Название</div>
+                        <button className="main-page-teams-item-team-btn">
+                            <img src={linkIcon} alt="" />
                         </button>
                     </div>
                 </div>
             </div>
-            <img src="" alt="" />
+            <img src={teamImg} alt="" />
         </div>
     </div>
   );

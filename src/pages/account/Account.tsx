@@ -152,69 +152,70 @@ const AccountPage = () => {
                     </button>
                 </div>
             </div>
-            <form action={''} className='competencies-form'>
-                <h3 className='competencies-form_titile'>Ваши компетенции</h3>
-                {/* Сделать внешний вид всех полей для ввода и логику их работы  */}
-                <select name="" id="" className='competencies-form_item'>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
-                </select>
-                <div className="competencies-form_item">
-                        <input
-                            className="personal-data-form_item-input grey-input"
-                            value={''}
-                            id="repeatNewPassword"
-                            name="repeatNewPassword"
-                            placeholder='Стэк'
-                        />
-                        <button>
-                            <img 
-                                className='personal-data-form_item-img' 
-                                src={pencilIcon} alt=""
+            <div className='competencies'>
+                <form action={''} className='competencies-form'>
+                    <h3 className='competencies-form_titile'>Ваши компетенции</h3>
+                    {/* Сделать внешний вид всех полей для ввода и логику их работы  */}
+                    <select name="" id="" className='competencies-form_item'>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                    <div className="competencies-form_item">
+                            <input
+                                className="personal-data-form_item-input grey-input"
+                                value={''}
+                                id="repeatNewPassword"
+                                name="repeatNewPassword"
+                                placeholder='Стэк'
                             />
+                            <button>
+                                <img 
+                                    className='personal-data-form_item-img' 
+                                    src={pencilIcon} alt=""
+                                />
+                            </button>
+                    </div>
+                    <select name="" id="" className='competencies-form_item'>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                    {/* Логика работы выведения этих сообщений
+                    <span className='green-notification'>Компетенция сохранена</span>
+                    <span className='red-notification'>Вы уверены, что хотите удалить компетенцию?</span> */}
+                    <div>
+                        <button
+                            // if в класс если данные в форме замены пароля не заполненны
+                            className='button button--inactive-pending right-margin-btn'
+                        >
+                            Сохранить
                         </button>
+                        {/* выводить кнопку только если компетенция сохранена */}
+                        <button
+                            className='button button--red'
+                        >
+                            Удалить
+                        </button>
+                    </div>
+                    {/* Логика работы переключения */}
+                    <div className='add-competence'>
+                        <button className='add-competence_btn'>
+                            <img className='add-competence_btn-img' src={arrow} alt="" />
+                        </button>
+                        1/1
+                        <button className='add-competence_btn'>
+                            <img className='add-competence_btn-img add-competence_btn-img-right' src={arrow} alt="" />
+                        </button>
+                    </div>
+                </form>
+                <div className='background-image'>
+                    <img src={backgroundImage} alt="" />
                 </div>
-                <select name="" id="" className='competencies-form_item'>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
-                </select>
-                {/* Логика работы выведения этих сообщений
-                <span className='green-notification'>Компетенция сохранена</span>
-                <span className='red-notification'>Вы уверены, что хотите удалить компетенцию?</span> */}
-                <div>
-                    <button
-                        // if в класс если данные в форме замены пароля не заполненны
-                        className='button button--inactive-pending right-margin-btn'
-                    >
-                        Сохранить
-                    </button>
-                    {/* выводить кнопку только если компетенция сохранена */}
-                    <button
-                        className='button button--red'
-                    >
-                        Удалить
-                    </button>
-                </div>
-                {/* Логика работы переключения */}
-                <div className='add-competence'>
-                    <button className='add-competence_btn'>
-                        <img className='add-competence_btn-img' src={arrow} alt="" />
-                    </button>
-                    1/1
-                    <button className='add-competence_btn'>
-                        <img className='add-competence_btn-img' src={arrow} alt="" />
-                    </button>
-                </div>
-            </form>
-            {/* Поправить картинку */}
-            <div className='background-image'>
-                <img src={backgroundImage} alt="" />
             </div>
         </div>
     );

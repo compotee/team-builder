@@ -11,7 +11,7 @@ const RegisterForm = () => {
         <input className="form-input" type="email" placeholder="Логин" />
         <input className="form-input" type="password" placeholder="Пароль" />
         <input className="form-input" type="password" placeholder="Повторите пароль" />
-        <button className="blue-button" type="submit">Зарегистрироваться</button>
+        <button className="button button--inactive-pending" type="submit">Зарегистрироваться</button>
     </form>
   );
 };
