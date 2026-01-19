@@ -82,6 +82,23 @@
     align-items: center;
 }
 
+.competencies-form_input {
+  width: 100%;
+  padding: 16px;
+  appearance: 'none';
+  border-radius: 20px;
+  color: var(--color-dark-blue);
+  background-color: var(--color-white);
+}
+
+.competencies-form_select {
+  width: 100%;
+  padding: 16px;
+  border-radius: 20px;
+  color: var(--color-dark-blue);
+  background-color: var(--color-white);
+}
+
 .green-notification {
     text-align: center;
     color: #004F10;

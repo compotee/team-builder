@@ -1,4 +1,27 @@
 .creating-distribution-container {
-    height: 1500px;
-    background-color: var(--color-red);
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: end;
+}
+
+.creating-distribution-container-title {
+    width: 100%;
+    font-size: var(--font-size-lg);
+}
+
+.creating-distribution-container-title:not(:first-child) {
+    margin-top: 24PX;
+}
+
+.creating-distribution-container_field {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 14px;
+}
+
+.creating-distribution-container_field-title {
+    white-space: nowrap;
 }

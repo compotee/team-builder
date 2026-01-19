@@ -155,35 +155,31 @@ const AccountPage = () => {
             <div className='competencies'>
                 <form action={''} className='competencies-form'>
                     <h3 className='competencies-form_titile'>Ваши компетенции</h3>
-                    {/* Сделать внешний вид всех полей для ввода и логику их работы  */}
-                    <select name="" id="" className='competencies-form_item'>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
+                    <select name="" id="" className='competencies-form_item competencies-form_select'>
+                        <option value="">Выберите роль</option>
+                        <option value="">Тимлид</option>
+                        <option value="">Аналитик</option>
+                        <option value="">Дизайнер</option>
+                        <option value="">Frontend-разработчик</option>
+                        <option value="">Backend-разработчик</option>
                     </select>
                     <div className="competencies-form_item">
                             <input
-                                className="personal-data-form_item-input grey-input"
+                                className="competencies-form_input"
                                 value={''}
-                                id="repeatNewPassword"
-                                name="repeatNewPassword"
                                 placeholder='Стэк'
                             />
                             <button>
-                                <img 
-                                    className='personal-data-form_item-img' 
-                                    src={pencilIcon} alt=""
-                                />
+                                <img className='' src={pencilIcon} alt="" />
                             </button>
                     </div>
-                    <select name="" id="" className='competencies-form_item'>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
-                        <option value=""></option>
+                    <select name="" id="" className='competencies-form_item competencies-form_select'>
+                        <option value="">Выберите опыт</option>
+                        <option value="">Тимлид</option>
+                        <option value="">Аналитик</option>
+                        <option value="">Дизайнер</option>
+                        <option value="">Frontend-разработчик</option>
+                        <option value="">Backend-разработчик</option>
                     </select>
                     {/* Логика работы выведения этих сообщений
                     <span className='green-notification'>Компетенция сохранена</span>

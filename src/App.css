@@ -44,9 +44,18 @@ body {
 }
 
 .grey-input {
-    width: 100%;
-    padding: 16px;
-    border-radius: 20px;
-    color: var(--color-dark-blue);
-    background-color: var(--color-grey);
+  width: 100%;
+  padding: 16px;
+  appearance: 'none';
+  border-radius: 20px;
+  color: var(--color-dark-blue);
+  background-color: var(--color-grey);
+}
+
+.grey-select {
+  width: 100%;
+  padding: 16px;
+  border-radius: 20px;
+  color: var(--color-dark-blue);
+  background-color: var(--color-grey);
 }
