@@ -1,4 +1,4 @@
 # Team Builder
 
-npm install
+npm install \
 npm run dev
