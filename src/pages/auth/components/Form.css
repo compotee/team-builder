@@ -13,3 +13,7 @@
     color: var(--color-dark-blue);
     background-color: var(--color-grey);
 }
+
+.auth-form-error {
+    color: #B80205;
+}

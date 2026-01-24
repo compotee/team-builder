@@ -30,11 +30,15 @@ body {
 .button--inactive-pending {
   color: var(--color-grey);
   background-color: var(--color-blue);
+  pointer-events: none;
+  cursor: default;
 }
 
 .button--inactive {
   color: #b2b2b2;
   background-color: var(--color-grey);
+  pointer-events: none;
+  cursor: default;
 }
 
 .button--red {

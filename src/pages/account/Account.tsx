@@ -1,219 +1,169 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import UserDataForm from './components/UserDataForm';
+import PasswordForm from './components/PasswordForm';
+import CompetenceForm from './components/CompetenceForm';
 
 import './Account.css';
 
-import pencilIcon from "../../assets/pencil-icon.svg"
-// Замена картинки при редактировании
-// import checkmarkIconIcon from "../../assets/checkmark-icon.svg"
-import arrow from "../../assets/arrow.svg"
-import backgroundImage from "../../assets/account-page-img.svg"
+
+interface UserData {
+  lastName: string;
+  firstName: string;
+  middleName: string;
+  login: string;
+  password: string;
+}
+
+interface Competence {
+  id: number;
+  role: string;
+  stack: string;
+  experience: string;
+}
 
 
 const AccountPage = () => {
-    const [isChangingPassword, setIsChangingPassword] = useState(false);
+    const [userData, setUserData] = useState<UserData>({
+        lastName: '',
+        firstName: '',
+        middleName: '',
+        login: '',
+        password: '********'
+    });
+
+    const [competences, setCompetences] = useState<Competence[]>([]);
+
+    useEffect(() => {
+        const loadData = async () => {
+        try {
+            // Загружаем данные пользователя
+            const userResponse = await fetch('/api/user/profile', {
+            credentials: 'include'
+            });
+            if (userResponse.ok) {
+            const userData = await userResponse.json();
+            setUserData({
+                lastName: userData.last_name || '',
+                firstName: userData.first_name || '',
+                middleName: userData.middle_name || '',
+                login: userData.tg_link || userData.username || '',
+                password: '********'
+            });
+            }
+
+            const competencesResponse = await fetch('/api/user/competences', {
+            credentials: 'include'
+            });
+            if (competencesResponse.ok) {
+            const competencesData = await competencesResponse.json();
+            setCompetences(competencesData);
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
+        }};
+
+        loadData();
+    }, []); 
+
+    const handleLogout = async () => {
+        try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            window.location.href = '/login';
+        }
+        } catch (error) {
+        console.error('Ошибка выхода:', error);
+        }
+    };
+
+    const handleDeleteProfile = async () => {
+        if (!window.confirm('Вы уверены, что хотите удалить профиль?')) {
+        return;
+        }
+        
+        try {
+        const response = await fetch('/api/user/profile', {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            window.location.href = '/';
+        }
+        } catch (error) {
+        console.error('Ошибка удаления профиля:', error);
+        }
+    };
+
+    const updateUserData = async () => {
+        try {
+        const response = await fetch('/api/user/profile', {
+            credentials: 'include'
+        });
+        if (response.ok) {
+            const userData = await response.json();
+            setUserData({
+            lastName: userData.last_name || '',
+            firstName: userData.first_name || '',
+            middleName: userData.middle_name || '',
+            login: userData.tg_link || userData.username || '',
+            password: '********'
+            });
+        }
+        } catch (error) {
+        console.error('Ошибка обновления данных пользователя:', error);
+        }
+    };
+
+    const updateCompetences = async () => {
+        try {
+        const response = await fetch('/api/user/competences', {
+            credentials: 'include'
+        });
+        if (response.ok) {
+            const competencesData = await response.json();
+            setCompetences(competencesData);
+        }
+        } catch (error) {
+        console.error('Ошибка обновления компетенций:', error);
+        }
+    };
 
     return (
         <div className='account-page-container'>
             <div className='personal-data-container'>
-                <form action={''} className="personal-data-form">
-                    <div className="personal-data-form_item">
-                        <label className="personal-data-form_item-label" htmlFor="lastName">Фамилия</label>
-                        <input
-                            className="personal-data-form_item-input grey-input"
-                            value={'Фамилия'}
-                            id="lastName"
-                            name="lastName"
-                        />
-                        <button>
-                            <img 
-                                className='personal-data-form_item-img' 
-                                src={pencilIcon} alt=""
-                            />
-                        </button>
-                    </div>
-                    <div className="personal-data-form_item">
-                        <label className="personal-data-form_item-label" htmlFor="name">Имя</label>
-                        <input
-                            className="personal-data-form_item-input grey-input"
-                            value={'Имя'}
-                            id="name"
-                            name="name"
-                        />
-                        <button>
-                            <img 
-                                className='personal-data-form_item-img' 
-                                src={pencilIcon} alt="" 
-                            />
-                        </button>
-                    </div>
-                    <div className="personal-data-form_item">
-                        <label className="personal-data-form_item-label" htmlFor="patronymic">Отчество</label>
-                        <input
-                            className="personal-data-form_item-input grey-input"
-                            value={'Отчество'}
-                            id="patronymic"
-                            name="patronymic"
-                        />
-                        <button>
-                            <img 
-                                className='personal-data-form_item-img' 
-                                src={pencilIcon} alt="" 
-                            />
-                        </button>
-                    </div>
-                    <div className="personal-data-form_item">
-                        <label className="personal-data-form_item-label" htmlFor="login">Логин в ТГ</label>
-                        <input
-                            className="personal-data-form_item-input grey-input"
-                            value={'@login'}
-                            id="login"
-                            name="login"
-                        />
-                        <button>
-                            <img 
-                                className='personal-data-form_item-img' 
-                                src={pencilIcon} alt="" 
-                            />
-                        </button>
-                    </div>
-                    <div className="personal-data-form_item">
-                        <label className="personal-data-form_item-label" htmlFor="password">Пароль</label>
-                        <input
-                            className="personal-data-form_item-input grey-input"
-                            value={'****'}
-                            id="password"
-                            name="password"
-                        />
-                        <button className='hidden-button'>
-                            <img 
-                                className='personal-data-form_item-img ' 
-                                src={pencilIcon} alt="" 
-                            />
-                        </button>
-                    </div>
-                </form>
-                { isChangingPassword && 
-                    <form className='personal-data-form change-password-form'>
-                        <div className="personal-data-form_item">
-                            <label className="personal-data-form_item-label" htmlFor="oldPassword">Старый пароль</label>
-                            <input
-                                className="personal-data-form_item-input grey-input"
-                                value={''}
-                                id="oldPassword"
-                                name="oldPassword"
-                            />
-                        </div>
-                        <div className="personal-data-form_item">
-                            <label className="personal-data-form_item-label" htmlFor="newPassword">Новый пароль</label>
-                            <input
-                                className="personal-data-form_item-input grey-input"
-                                value={''}
-                                id="newPassword"
-                                name="newPassword"
-                            />
-                        </div>
-                        <div className="personal-data-form_item">
-                            <label className="personal-data-form_item-label" htmlFor="repeatNewPassword">Повторите пароль</label>
-                            <input
-                                className="personal-data-form_item-input grey-input"
-                                value={''}
-                                id="repeatNewPassword"
-                                name="repeatNewPassword"
-                            />
-                        </div>
-                    </form>
-                }
-                { !isChangingPassword ?
-                    <button 
-                        className='button button--active'
-                        onClick={() => setIsChangingPassword(true)}
-                    >
-                        Изменить пароль
-                    </button> 
-                    :
-                    <button 
-                        // if в класс если данные в форме замены пароля не заполненны
-                        className='button button--inactive-pending'
-                        onClick={() => setIsChangingPassword(false)}
-                    >
-                        Сохранить
-                    </button>
-                }
+                <UserDataForm userData={userData} onUpdate={updateUserData} />
+                <PasswordForm />
                 <div>
                     <button
                         className='button button--red right-margin-btn'
+                        onClick={handleDeleteProfile}
                     >
                         Удалить профиль
                     </button>
                     <button
                         className='button button--red'
+                        onClick={handleLogout}
                     >
                         Выйти из аккаунта
                     </button>
+                    </div>
                 </div>
-            </div>
             <div className='competencies'>
-                <form action={''} className='competencies-form'>
-                    <h3 className='competencies-form_titile'>Ваши компетенции</h3>
-                    <select name="" id="" className='competencies-form_item competencies-form_select'>
-                        <option value="">Выберите роль</option>
-                        <option value="">Тимлид</option>
-                        <option value="">Аналитик</option>
-                        <option value="">Дизайнер</option>
-                        <option value="">Frontend-разработчик</option>
-                        <option value="">Backend-разработчик</option>
-                    </select>
-                    <div className="competencies-form_item">
-                            <input
-                                className="competencies-form_input"
-                                value={''}
-                                placeholder='Стэк'
-                            />
-                            <button>
-                                <img className='' src={pencilIcon} alt="" />
-                            </button>
-                    </div>
-                    <select name="" id="" className='competencies-form_item competencies-form_select'>
-                        <option value="">Выберите опыт</option>
-                        <option value="">Тимлид</option>
-                        <option value="">Аналитик</option>
-                        <option value="">Дизайнер</option>
-                        <option value="">Frontend-разработчик</option>
-                        <option value="">Backend-разработчик</option>
-                    </select>
-                    {/* Логика работы выведения этих сообщений
-                    <span className='green-notification'>Компетенция сохранена</span>
-                    <span className='red-notification'>Вы уверены, что хотите удалить компетенцию?</span> */}
-                    <div>
-                        <button
-                            // if в класс если данные в форме замены пароля не заполненны
-                            className='button button--inactive-pending right-margin-btn'
-                        >
-                            Сохранить
-                        </button>
-                        {/* выводить кнопку только если компетенция сохранена */}
-                        <button
-                            className='button button--red'
-                        >
-                            Удалить
-                        </button>
-                    </div>
-                    {/* Логика работы переключения */}
-                    <div className='add-competence'>
-                        <button className='add-competence_btn'>
-                            <img className='add-competence_btn-img' src={arrow} alt="" />
-                        </button>
-                        1/1
-                        <button className='add-competence_btn'>
-                            <img className='add-competence_btn-img add-competence_btn-img-right' src={arrow} alt="" />
-                        </button>
-                    </div>
-                </form>
-                <div className='background-image'>
-                    <img src={backgroundImage} alt="" />
-                </div>
-            </div>
+        <CompetenceForm 
+          competences={competences}
+          onUpdate={updateCompetences}
+        />
+        
+        <div className='background-image'>
+          <img src="/assets/account-page-img.svg" alt="" />
         </div>
+      </div>
+    </div>
     );
 };
 
