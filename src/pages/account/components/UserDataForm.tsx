@@ -51,11 +51,7 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
       setEditingField(null);
     }
   };
-
-  const cancelEditing = () => {
-    setEditingField(null);
-  };
-
+  
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempValue(e.target.value);
   };

@@ -8,7 +8,7 @@ const RegisterForm = () => {
     lastName: "",
     firstName: "",
     middleName: "",
-    username: "",
+    userName: "",
     password: "",
     confirmPassword: ""
   });
@@ -25,38 +25,44 @@ const RegisterForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (formData.password !== formData.confirmPassword) {
-      setError("Пароли не совпадают");
-      return;
-    }
-    
     try {
-      const response = await fetch('/api/auth/signUp', {
+      const response = await fetch('http://77.222.37.36:8080/auth/signUp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', 
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({
-          username: formData.username,
-          first_name: formData.firstName,
-          middle_name: formData.middleName,
-          last_name: formData.lastName,
-          password: formData.password
+          firstName: formData.firstName,
+          middleName: formData.middleName,
+          lastName: formData.lastName,
+          username: formData.userName,
+          tgLink: formData.userName,
+          password: formData.password,
+          password_repeat: formData.confirmPassword,
         })
       });
 
+      const responseData = await response.json();
+      console.log('Ответ сервера:', responseData); 
+
       if (!response.ok) {
-        throw new Error('Ошибка авторизации');
+        throw new Error(responseData.message || `Ошибка ${response.status}`);
       }
+
+      
       
       window.location.href = '/main-page';
-    } catch {
-      setError('Ошибка при регистрации');
+    } catch (err) {
+      setError(`Ошибка запроса: ${err}`);
     }
   };
 
   const isFormValid = 
     formData.lastName && 
     formData.firstName && 
-    formData.username && 
+    formData.userName && 
     formData.password && 
     formData.confirmPassword;
 
@@ -89,10 +95,10 @@ const RegisterForm = () => {
       />
       <input 
         className="form-input" 
-        name="username"
+        name="userName"
         type="text" 
         placeholder="Логин в телеграмм"
-        value={formData.username}
+        value={formData.userName}
         onChange={handleChange}
       />
       <input 

@@ -5,6 +5,8 @@ import CompetenceForm from './components/CompetenceForm';
 
 import './Account.css';
 
+import  backgroundImg from '../../assets/account-page-img.svg'
+
 
 interface UserData {
   lastName: string;
@@ -81,22 +83,33 @@ const AccountPage = () => {
     };
 
     const handleDeleteProfile = async () => {
-        if (!window.confirm('Вы уверены, что хотите удалить профиль?')) {
-        return;
-        }
+
+        fetch("http://77.222.37.36:8080/user/me", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json"
+        }})
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.error(err));
+
+        // if (!window.confirm('Вы уверены, что хотите удалить профиль?')) {
+        // return;
+        // }
         
-        try {
-        const response = await fetch('/api/user/profile', {
-            method: 'DELETE',
-            credentials: 'include'
-        });
+        // try {
+        // const response = await fetch('/api/user/profile', {
+        //     method: 'DELETE',
+        //     credentials: 'include'
+        // });
         
-        if (response.ok) {
-            window.location.href = '/';
-        }
-        } catch (error) {
-        console.error('Ошибка удаления профиля:', error);
-        }
+        // if (response.ok) {
+        //     window.location.href = '/';
+        // }
+        // } catch (error) {
+        // console.error('Ошибка удаления профиля:', error);
+        // }
     };
 
     const updateUserData = async () => {
@@ -160,7 +173,7 @@ const AccountPage = () => {
         />
         
         <div className='background-image'>
-          <img src="/assets/account-page-img.svg" alt="" />
+          <img src={backgroundImg} alt="" />
         </div>
       </div>
     </div>

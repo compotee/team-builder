@@ -10,22 +10,36 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log({
+          username: username,
+          password: password,
+        })
     
     try {
-      const response = await fetch('/api/auth/signIn', {
+      const response = await fetch('http://77.222.37.36:8080/auth/signIn', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         credentials: 'include',
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({
+          username: username.trim(),
+          password: password,
+        })
       });
+
+      const responseData = await response.json();
+      console.log('Ответ сервера:', responseData); 
 
       if (!response.ok) {
         throw new Error('Ошибка авторизации');
       }
 
       window.location.href = '/main-page';
-    } catch {
-      setError('Неверный логин или пароль');
+    } catch (err) {
+      setError(`${err}`);
     }
   };
 
