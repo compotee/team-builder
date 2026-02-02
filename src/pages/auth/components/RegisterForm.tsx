@@ -2,6 +2,9 @@ import { useState } from "react";
 
 import "./Form.css"
 
+import eyeOpenIcon from '../../../assets/eye-open.svg';
+import eyeClosedIcon from '../../../assets/eye-close.svg';
+
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +16,8 @@ const RegisterForm = () => {
     confirmPassword: ""
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,6 +64,14 @@ const RegisterForm = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const isFormValid = 
     formData.lastName && 
     formData.firstName && 
@@ -101,22 +114,46 @@ const RegisterForm = () => {
         value={formData.userName}
         onChange={handleChange}
       />
-      <input 
-        className="form-input" 
-        name="password"
-        type="password" 
-        placeholder="Пароль"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      <input 
-        className="form-input" 
-        name="confirmPassword"
-        type="password" 
-        placeholder="Повторите пароль"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-      />
+      <div className="password-input-wrapper">
+        <input 
+          className="form-input" 
+          name="password"
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Пароль"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        <button 
+          type="button" 
+          className="password-toggle-button"
+          onClick={togglePasswordVisibility}
+        >
+          <img 
+            src={showPassword ?  eyeOpenIcon : eyeClosedIcon}  
+            alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'} 
+          />
+        </button>
+      </div>
+      <div className="password-input-wrapper">
+        <input 
+          className="form-input" 
+          name="confirmPassword"
+          type={showConfirmPassword ? 'text' : 'password'} 
+          placeholder="Повторите пароль"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+        />
+        <button 
+          type="button" 
+          className="password-toggle-button"
+          onClick={toggleConfirmPasswordVisibility }
+        >
+          <img 
+            src={showConfirmPassword ?  eyeOpenIcon : eyeClosedIcon}  
+            alt={showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'} 
+          />
+        </button>
+      </div>
       <button 
         className={isFormValid ? "button button--active" : "button button--inactive-pending"} 
         type="submit"
