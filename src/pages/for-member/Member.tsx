@@ -25,7 +25,6 @@ const MemberPage = () => {
                     </div>
                     <div className='distribution-card_info-project'>
                         <span className='distribution-card_info-project_title'>Дата окончания проектов</span>
-                        {/* знач`к с вопросом и подсказкой */}
                         <div className='distribution-card_info-project_text'>25.07.2026</div>
                     </div>
                     { isJoin ?

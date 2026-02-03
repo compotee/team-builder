@@ -4,9 +4,9 @@ import "./CreatingDistribution.css"
 
 
 const CreatingDistribution = () => {
-    const [membersCount, setMembersCount] = useState(5);
+    const [membersCount, setMembersCount] = useState("5");
 
-    const selects = Array.from({ length: membersCount }, (_, index) => (
+    const selects = Array.from({ length: Number(membersCount) }, (_, index) => (
         <select 
             key={index} 
             name={`member-${index}`}
@@ -20,6 +20,14 @@ const CreatingDistribution = () => {
             <option value="">Backend-разработчик</option>
         </select>
     ));
+
+    const handleMembersCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        
+        if (value === '' || /^\d+$/.test(value)) {
+            setMembersCount(value);
+        }
+    };
 
     return (
         <form className='creating-distribution-container'>
@@ -40,7 +48,8 @@ const CreatingDistribution = () => {
                     className="creating-distribution-container_field-input grey-input" 
                     type="number" 
                     value={membersCount} 
-                    onChange={(e) => setMembersCount(Number(e.target.value))}
+                    onChange={handleMembersCountChange}
+                    min="1"
                 />
             </div>
             <p className='creating-distribution-container-title'>2.  Выберите роли, которые необходимы в проекте</p>

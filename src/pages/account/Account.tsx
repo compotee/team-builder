@@ -84,7 +84,7 @@ const AccountPage = () => {
 
     const handleDeleteProfile = async () => {
 
-        fetch("http://77.222.37.36:8080/user/me", {
+        fetch("http://77.222.37.36:8080/split", {
             method: "GET",
             credentials: "include",
             headers: {
