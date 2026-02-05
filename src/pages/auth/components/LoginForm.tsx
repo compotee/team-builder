@@ -1,4 +1,5 @@
 import { useState } from "react";
+import mockData from '../../../Mocks'
 
 import "./Form.css"
 
@@ -14,31 +15,15 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    try {
-      const response = await fetch('http://77.222.37.36:8080/auth/signIn', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          username: username.trim(),
-          password: password,
-        })
-      });
-
-      const responseData = await response.json();
-      console.log('Ответ сервера:', responseData); 
-
-      if (!response.ok) {
-        throw new Error('Ошибка авторизации');
-      }
-
+  
+    if (username === mockData.User.username && password === mockData.User.password) {
+      localStorage.setItem('currentUser', JSON.stringify(mockData.User));
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      console.log('Вход выполнен успешно:', mockData.User);
       window.location.href = '/main-page';
-    } catch (err) {
-      setError(`${err}`);
+    } else {
+      setError('Неверный логин или пароль');
     }
   };
 

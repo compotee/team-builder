@@ -1,8 +1,7 @@
-import { useState } from 'react';
-
-
+import { useState, useEffect } from 'react';
 import pencilIcon from "../../../assets/pencil-icon.svg";
 import arrow from "../../../assets/arrow.svg";
+import mockData from '../../../Mocks';
 
 interface Competence {
   id: number;
@@ -18,21 +17,23 @@ interface CompetenceFormProps {
 
 const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
   const [currentCompetenceIndex, setCurrentCompetenceIndex] = useState(0);
-  const [currentCompetence, setCurrentCompetence] = useState<Competence>({
-    id: 0,
-    role: '',
-    stack: '',
-    experience: ''
-  });
+  
+  // Инициализируем текущую компетенцию
+  const getInitialCompetence = () => {
+    if (competences.length > 0) {
+      return competences[0];
+    }
+    return { id: 4, role: '', stack: '', experience: '' };
+  };
+  
+  const [currentCompetence, setCurrentCompetence] = useState<Competence>(getInitialCompetence());
 
-  // При изменении списка компетенций или индекса обновляем текущую
-  useState(() => {
+  // Обновляем currentCompetence при изменении competences или currentCompetenceIndex
+  useEffect(() => {
     if (competences.length > 0 && currentCompetenceIndex < competences.length) {
       setCurrentCompetence(competences[currentCompetenceIndex]);
-    } else {
-      setCurrentCompetence({ id: 0, role: '', stack: '', experience: '' });
     }
-  });
+  }, [competences, currentCompetenceIndex]);
 
   const handleCompetenceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, field: keyof Competence) => {
     const { value } = e.target;
@@ -42,60 +43,37 @@ const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
     }));
   };
 
-  const saveCompetence = async () => {
-    try {
-      const response = await fetch('/api/user/competences', {
-        method: competences.length > 0 ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(currentCompetence)
-      });
-
-      if (response.ok) {
-        onUpdate();
-        alert('Компетенция сохранена');
-      }
-    } catch (error) {
-      console.error('Ошибка сохранения компетенции:', error);
-    }
+  const saveCompetence = () => {
+    // В демо-режине просто показываем сообщение
+    alert('В демо-режиме сохранение компетенций недоступно');
+    
+    // Если нужно обновить UI без сохранения
+    onUpdate();
   };
 
-  const deleteCompetence = async () => {
+  const deleteCompetence = () => {
     if (competences.length === 0) return;
 
     if (!window.confirm('Вы уверены, что хотите удалить компетенцию?')) {
       return;
     }
 
-    try {
-      const response = await fetch(`/api/user/competences/${currentCompetence.id}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        onUpdate();
-      }
-    } catch (error) {
-      console.error('Ошибка удаления компетенции:', error);
-    }
+    // В демо-режине просто показываем сообщение
+    alert('В демо-режиме удаление компетенций недоступно');
+    
+    // Если нужно обновить UI без сохранения
+    onUpdate();
   };
 
   const nextCompetence = () => {
     if (currentCompetenceIndex < competences.length - 1) {
-      const nextIndex = currentCompetenceIndex + 1;
-      setCurrentCompetenceIndex(nextIndex);
-      setCurrentCompetence(competences[nextIndex]);
+      setCurrentCompetenceIndex(prev => prev + 1);
     }
   };
 
   const prevCompetence = () => {
     if (currentCompetenceIndex > 0) {
-      const prevIndex = currentCompetenceIndex - 1;
-      setCurrentCompetenceIndex(prevIndex);
-      setCurrentCompetence(competences[prevIndex]);
+      setCurrentCompetenceIndex(prev => prev - 1);
     }
   };
 
@@ -115,11 +93,9 @@ const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
         onChange={(e) => handleCompetenceChange(e, 'role')}
       >
         <option value="">Выберите роль</option>
-        <option value="Тимлид">Тимлид</option>
-        <option value="Аналитик">Аналитик</option>
-        <option value="Дизайнер">Дизайнер</option>
-        <option value="Frontend-разработчик">Frontend-разработчик</option>
-        <option value="Backend-разработчик">Backend-разработчик</option>
+        {mockData.Role.map((role, index) => (
+          <option key={index} value={role}>{role}</option>
+        ))}
       </select>
 
       <div className="competencies-form_item">
@@ -127,9 +103,9 @@ const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
           className="competencies-form_input"
           value={currentCompetence.stack}
           onChange={(e) => handleCompetenceChange(e, 'stack')}
-          placeholder='Стэк'
+          placeholder='Стэк (например: React, TypeScript)'
         />
-        <button>
+        <button type="button">
           <img src={pencilIcon} alt="Редактировать" />
         </button>
       </div>
@@ -141,10 +117,9 @@ const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
         onChange={(e) => handleCompetenceChange(e, 'experience')}
       >
         <option value="">Выберите опыт</option>
-        <option value="Меньше года">Меньше года</option>
-        <option value="1-3 года">1-3 года</option>
-        <option value="3-5 лет">3-5 лет</option>
-        <option value="Более 5 лет">Более 5 лет</option>
+        {mockData.Experience.map((exp, index) => (
+          <option key={index} value={exp}>{exp}</option>
+        ))}
       </select>
 
       <div>

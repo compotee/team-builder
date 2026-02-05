@@ -57,7 +57,7 @@
     width: fit-content;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 34px;
 }
 
 .teams-container-item {

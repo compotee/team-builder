@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import UserDataForm from './components/UserDataForm';
 import PasswordForm from './components/PasswordForm';
 import CompetenceForm from './components/CompetenceForm';
+import mockData from '../../Mocks'
+import { useNavigate } from 'react-router-dom';
 
 import './Account.css';
-
-import  backgroundImg from '../../assets/account-page-img.svg'
-
+import backgroundImg from '../../assets/account-page-img.svg'
 
 interface UserData {
   lastName: string;
@@ -23,7 +23,6 @@ interface Competence {
   experience: string;
 }
 
-
 const AccountPage = () => {
     const [userData, setUserData] = useState<UserData>({
         lastName: '',
@@ -34,116 +33,60 @@ const AccountPage = () => {
     });
 
     const [competences, setCompetences] = useState<Competence[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const loadData = async () => {
-        try {
-            // Загружаем данные пользователя
-            const userResponse = await fetch('/api/user/profile', {
-            credentials: 'include'
-            });
-            if (userResponse.ok) {
-            const userData = await userResponse.json();
+        // Загружаем данные из mock
+        const loadMockData = () => {
+            const currentUser = mockData.User;
+            
             setUserData({
-                lastName: userData.last_name || '',
-                firstName: userData.first_name || '',
-                middleName: userData.middle_name || '',
-                login: userData.tg_link || userData.username || '',
+                lastName: currentUser.lastName || '',
+                firstName: currentUser.firstName || '',
+                middleName: currentUser.middleName || '',
+                login: currentUser.tgLink || currentUser.username || '',
                 password: '********'
             });
+
+            if (currentUser.competence && currentUser.competence.length > 0) {
+                setCompetences(currentUser.competence);
+            } else if (mockData.Competence) {
+                setCompetences(mockData.Competence);
             }
-
-            const competencesResponse = await fetch('/api/user/competences', {
-            credentials: 'include'
-            });
-            if (competencesResponse.ok) {
-            const competencesData = await competencesResponse.json();
-            setCompetences(competencesData);
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
-        }};
-
-        loadData();
-    }, []); 
-
-    const handleLogout = async () => {
-        try {
-        const response = await fetch('/api/auth/logout', {
-            method: 'POST',
-            credentials: 'include'
-        });
+        };
         
-        if (response.ok) {
-            window.location.href = '/login';
-        }
-        } catch (error) {
-        console.error('Ошибка выхода:', error);
-        }
+        loadMockData();
+    }, []);  
+
+    const handleLogout = () => {
+        // Просто перенаправляем на страницу логина
+        navigate('/login');
     };
 
-    const handleDeleteProfile = async () => {
-
-        fetch("http://77.222.37.36:8080/split", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Accept": "application/json"
-        }})
-        .then(res => res.json())
-        .then(data => console.log(data))
-        .catch(err => console.error(err));
-
-        // if (!window.confirm('Вы уверены, что хотите удалить профиль?')) {
-        // return;
-        // }
+    const handleDeleteProfile = () => {
+        if (!window.confirm('Вы уверены, что хотите удалить профиль? Это действие нельзя отменить.')) {
+            return;
+        }
         
-        // try {
-        // const response = await fetch('/api/user/profile', {
-        //     method: 'DELETE',
-        //     credentials: 'include'
-        // });
-        
-        // if (response.ok) {
-        //     window.location.href = '/';
-        // }
-        // } catch (error) {
-        // console.error('Ошибка удаления профиля:', error);
-        // }
+        // В демо-режиме просто показываем сообщение
+        alert('В демо-режиме удаление профиля недоступно');
     };
 
-    const updateUserData = async () => {
-        try {
-        const response = await fetch('/api/user/profile', {
-            credentials: 'include'
-        });
-        if (response.ok) {
-            const userData = await response.json();
-            setUserData({
-            lastName: userData.last_name || '',
-            firstName: userData.first_name || '',
-            middleName: userData.middle_name || '',
-            login: userData.tg_link || userData.username || '',
+    const updateUserData = () => {
+        // В демо-режине обновляем данные из mock
+        const currentUser = mockData.User;
+        setUserData({
+            lastName: currentUser.lastName || '',
+            firstName: currentUser.firstName || '',
+            middleName: currentUser.middleName || '',
+            login: currentUser.tgLink || currentUser.username || '',
             password: '********'
-            });
-        }
-        } catch (error) {
-        console.error('Ошибка обновления данных пользователя:', error);
-        }
+        });
     };
 
-    const updateCompetences = async () => {
-        try {
-        const response = await fetch('/api/user/competences', {
-            credentials: 'include'
-        });
-        if (response.ok) {
-            const competencesData = await response.json();
-            setCompetences(competencesData);
-        }
-        } catch (error) {
-        console.error('Ошибка обновления компетенций:', error);
-        }
+    const updateCompetences = () => {
+        // В демо-режине обновляем компетенции из mock
+        setCompetences(mockData.Competence || []);
     };
 
     return (
@@ -164,19 +107,19 @@ const AccountPage = () => {
                     >
                         Выйти из аккаунта
                     </button>
-                    </div>
                 </div>
+            </div>
             <div className='competencies'>
-        <CompetenceForm 
-          competences={competences}
-          onUpdate={updateCompetences}
-        />
-        
-        <div className='background-image'>
-          <img src={backgroundImg} alt="" />
+                <CompetenceForm 
+                    competences={competences}
+                    onUpdate={updateCompetences}
+                />
+                
+                <div className='background-image'>
+                    <img src={backgroundImg} alt="" />
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
     );
 };
 

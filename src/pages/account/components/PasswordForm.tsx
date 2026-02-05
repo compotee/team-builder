@@ -22,30 +22,16 @@ const PasswordForm = () => {
       return;
     }
 
-    try {
-      const response = await fetch('/api/user/change-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          oldPassword: passwordData.oldPassword,
-          newPassword: passwordData.newPassword
-        })
-      });
-
-      if (response.ok) {
-        alert('Пароль успешно изменен');
-        setIsChangingPassword(false);
-        setPasswordData({ oldPassword: '', newPassword: '', repeatNewPassword: '' });
-      } else {
-        const error = await response.json();
-        throw new Error(error.message || 'Ошибка смены пароля');
-      }
-    } catch (error) {
-      console.error('Ошибка сохранения:', error);
+    if (passwordData.newPassword.length < 6) {
+      alert('Пароль должен содержать минимум 6 символов');
+      return;
     }
+
+    // В демо-режине просто показываем сообщение
+    alert('В демо-режиме смена пароля недоступна');
+    
+    setIsChangingPassword(false);
+    setPasswordData({ oldPassword: '', newPassword: '', repeatNewPassword: '' });
   };
 
   const isPasswordFormValid = 

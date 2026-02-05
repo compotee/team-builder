@@ -1,7 +1,5 @@
 import './Team.css'
-
 import copyIcon from '../../assets/copy-icon.svg'
-
 
 interface TeamMember {
   id: number;
@@ -10,18 +8,15 @@ interface TeamMember {
   telegram: string;
 }
 
-const Team = () => {
-    const teamMembers: TeamMember[] = [
-        { id: 1, role: 'Тимлид', name: 'Васильев Василий Васильевич', telegram: '@vassilV' },
-        { id: 2, role: 'Тимлид', name: 'Васильев Василий Васильевич', telegram: '@vassilV' },
-        { id: 3, role: 'Тимлид', name: 'Васильев Василий Васильевич', telegram: '@vassilV' },
-        { id: 4, role: 'Тимлид', name: 'Иванов Иван Иванович', telegram: '@ivanov' },
-        { id: 5, role: 'Frontend разработчик', name: 'Балыков Владислав Иванович', telegram: '@BalikBik' },
-    ];
+interface TeamProps {
+  teamMembers: TeamMember[];
+}
 
+const Team = ({ teamMembers }: TeamProps) => {
     const handleCopy = async (member: TeamMember) => {
         try {
             await navigator.clipboard.writeText(member.telegram);
+            alert(`Никнейм ${member.telegram} скопирован в буфер обмена`);
         } catch (err) {
             console.error('Ошибка при копировании:', err);
         }
@@ -37,6 +32,7 @@ const Team = () => {
             <button 
                 className='team-item_copy-btn'
                 onClick={() => handleCopy(member)}
+                title="Скопировать телеграм"
             >
                 <img src={copyIcon} alt="Копировать"/>
             </button>

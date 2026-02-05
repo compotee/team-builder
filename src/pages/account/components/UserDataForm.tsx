@@ -1,6 +1,4 @@
 import { useState, useRef } from 'react';
-
-
 import pencilIcon from "../../../assets/pencil-icon.svg";
 import checkmarkIcon from "../../../assets/checkmark-icon.svg";
 
@@ -29,27 +27,14 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
     setTempValue(currentValue);
   };
 
-  const saveField = async (fieldKey: string) => {
-    try {
-      const response = await fetch('/api/user/profile', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          [fieldKey]: tempValue
-        })
-      });
-
-      if (response.ok) {
-        onUpdate();
-      }
-    } catch (error) {
-      console.error('Ошибка сохранения:', error);
-    } finally {
-      setEditingField(null);
-    }
+  const saveField = (fieldKey: string) => {
+    // В демо-режиме просто показываем сообщение
+    alert('В демо-режиме редактирование данных недоступно');
+    
+    // Если нужно обновить UI без сохранения
+    onUpdate();
+    
+    setEditingField(null);
   };
   
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {

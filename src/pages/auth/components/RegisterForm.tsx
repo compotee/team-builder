@@ -30,38 +30,27 @@ const RegisterForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    try {
-      const response = await fetch('http://77.222.37.36:8080/auth/signUp', {
-        method: 'POST',
-        credentials: 'include', 
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          middleName: formData.middleName,
-          lastName: formData.lastName,
-          username: formData.userName,
-          tgLink: formData.userName,
-          password: formData.password,
-          password_repeat: formData.confirmPassword,
-        })
-      });
-
-      const responseData = await response.json();
-      console.log('Ответ сервера:', responseData); 
-
-      if (!response.ok) {
-        throw new Error(responseData.message || `Ошибка ${response.status}`);
-      }
-
-      
-      
-      window.location.href = '/main-page';
-    } catch (err) {
-      setError(`Ошибка запроса: ${err}`);
+    if (formData.password !== formData.confirmPassword) {
+      setError("Пароли не совпадают");
+      return;
     }
+    
+    const mockUser = {
+      id: Date.now(), 
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      middleName: formData.middleName || undefined,
+      username: formData.userName,
+      tgLink: formData.userName,
+      password: formData.password,
+      competence: []
+    };
+    
+    localStorage.setItem('currentUser', JSON.stringify(mockUser));
+    localStorage.setItem('isAuthenticated', 'true');
+    console.log('Регистрация успешна:', mockUser);
+    
+    window.location.href = '/main-page';
   };
 
   const togglePasswordVisibility = () => {
