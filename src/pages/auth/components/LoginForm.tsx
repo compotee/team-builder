@@ -16,11 +16,13 @@ const LoginForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
+
+    console.log(username)
+    console.log(mockData.User.username)
+    console.log(password)
+    console.log(mockData.User.password)
+
     if (username === mockData.User.username && password === mockData.User.password) {
-      localStorage.setItem('currentUser', JSON.stringify(mockData.User));
-      localStorage.setItem('isAuthenticated', 'true');
-      
-      console.log('Вход выполнен успешно:', mockData.User);
       window.location.href = '/main-page';
     } else {
       setError('Неверный логин или пароль');

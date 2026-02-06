@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import UserDataForm from './components/UserDataForm';
 import PasswordForm from './components/PasswordForm';
 import CompetenceForm from './components/CompetenceForm';
+import ConfirmModal from '../../components/confirm-modal/ConfirmModal';
 import mockData from '../../Mocks'
 import { useNavigate } from 'react-router-dom';
 
@@ -29,14 +30,15 @@ const AccountPage = () => {
         firstName: '',
         middleName: '',
         login: '',
-        password: '********'
+        password: '*'.repeat(mockData.User.password.length)
     });
 
     const [competences, setCompetences] = useState<Competence[]>([]);
+    const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState<'logout' | 'delete'>('logout');
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Загружаем данные из mock
         const loadMockData = () => {
             const currentUser = mockData.User;
             
@@ -45,7 +47,7 @@ const AccountPage = () => {
                 firstName: currentUser.firstName || '',
                 middleName: currentUser.middleName || '',
                 login: currentUser.tgLink || currentUser.username || '',
-                password: '********'
+                password: '*'.repeat(currentUser.password?.length || 0)
             });
 
             if (currentUser.competence && currentUser.competence.length > 0) {
@@ -58,22 +60,30 @@ const AccountPage = () => {
         loadMockData();
     }, []);  
 
-    const handleLogout = () => {
-        // Просто перенаправляем на страницу логина
-        navigate('/login');
+    const handleLogoutClick = () => {
+        setModalType('logout');
+        setShowModal(true);
     };
 
-    const handleDeleteProfile = () => {
-        if (!window.confirm('Вы уверены, что хотите удалить профиль? Это действие нельзя отменить.')) {
-            return;
+    const handleDeleteClick = () => {
+        setModalType('delete');
+        setShowModal(true);
+    };
+
+    const handleConfirm = () => {
+        if (modalType === 'logout') {
+            navigate('/auth');
+        } else {
+            navigate('/');
         }
-        
-        // В демо-режиме просто показываем сообщение
-        alert('В демо-режиме удаление профиля недоступно');
+        setShowModal(false);
+    };
+
+    const handleCancel = () => {
+        setShowModal(false);
     };
 
     const updateUserData = () => {
-        // В демо-режине обновляем данные из mock
         const currentUser = mockData.User;
         setUserData({
             lastName: currentUser.lastName || '',
@@ -85,41 +95,49 @@ const AccountPage = () => {
     };
 
     const updateCompetences = () => {
-        // В демо-режине обновляем компетенции из mock
         setCompetences(mockData.Competence || []);
     };
 
     return (
-        <div className='account-page-container'>
-            <div className='personal-data-container'>
-                <UserDataForm userData={userData} onUpdate={updateUserData} />
-                <PasswordForm />
-                <div>
-                    <button
-                        className='button button--red right-margin-btn'
-                        onClick={handleDeleteProfile}
-                    >
-                        Удалить профиль
-                    </button>
-                    <button
-                        className='button button--red'
-                        onClick={handleLogout}
-                    >
-                        Выйти из аккаунта
-                    </button>
+        <>
+            <div className='account-page-container'>
+                <div className='personal-data-container'>
+                    <UserDataForm userData={userData} onUpdate={updateUserData} />
+                    <PasswordForm />
+                    <div>
+                        <button
+                            className='button button--red right-margin-btn'
+                            onClick={handleDeleteClick}
+                        >
+                            Удалить профиль
+                        </button>
+                        <button
+                            className='button button--red'
+                            onClick={handleLogoutClick}
+                        >
+                            Выйти из аккаунта
+                        </button>
+                    </div>
+                </div>
+                <div className='competencies'>
+                    <CompetenceForm 
+                        competences={competences}
+                        onUpdate={updateCompetences}
+                    />
+                    
+                    <div className='background-image'>
+                        <img src={backgroundImg} alt="" />
+                    </div>
                 </div>
             </div>
-            <div className='competencies'>
-                <CompetenceForm 
-                    competences={competences}
-                    onUpdate={updateCompetences}
-                />
-                
-                <div className='background-image'>
-                    <img src={backgroundImg} alt="" />
-                </div>
-            </div>
-        </div>
+
+            <ConfirmModal
+                isOpen={showModal}
+                type={modalType}
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+            />
+        </>
     );
 };
 

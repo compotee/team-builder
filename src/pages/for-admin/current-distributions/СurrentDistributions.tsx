@@ -20,11 +20,11 @@ const СurrentDistributions: React.FC<СurrentDistributionsProps> = ({ onDistrib
 
   return (
     <div className="current-distributions-container">
-      {/* Сформированные распределения */}
-      {completedDistributions.length > 0 && (
+      {/* Несформированные распределения */}
+      {activeDistributions.length > 0 && (
         <ul className="distributions-list">
-          <li className="distributions-list_title">Команды сформированы</li>
-          {completedDistributions.map(dist => (
+          <li className="distributions-list_title">Команды не сформированы</li>
+          {activeDistributions.map(dist => (
             <li key={dist.id} className="distributions-list_item">
               <div className="distributions-list_item-name">{dist.name}</div>
               <button 
@@ -38,11 +38,11 @@ const СurrentDistributions: React.FC<СurrentDistributionsProps> = ({ onDistrib
         </ul>
       )}
 
-      {/* Несформированные распределения */}
-      {activeDistributions.length > 0 && (
+      {/* Сформированные распределения */}
+      {completedDistributions.length > 0 && (
         <ul className="distributions-list">
-          <li className="distributions-list_title">Команды не сформированы</li>
-          {activeDistributions.map(dist => (
+          <li className="distributions-list_title">Команды сформированы</li>
+          {completedDistributions.map(dist => (
             <li key={dist.id} className="distributions-list_item">
               <div className="distributions-list_item-name">{dist.name}</div>
               <button 

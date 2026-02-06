@@ -31,6 +31,7 @@ const AdminPage = () => {
     const handleDistributionCreated = () => {
         // Просто переключаемся на вкладку текущих распределений
         setActiveTab('current');
+        console.log(selectedDistributionId);
         setSelectedDistributionId(null); // Сбрасываем выбранное, чтобы показать список
     };
 

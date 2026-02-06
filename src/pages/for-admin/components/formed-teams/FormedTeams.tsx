@@ -1,5 +1,8 @@
+import { useState } from "react";
 import Team from "../../../../components/team/Team";
 import "./FormedTeams.css"
+
+import questionIcon from '../../../../assets/question-icon.svg'
 
 interface TeamMember {
     id: number;
@@ -27,6 +30,7 @@ interface FormedTeamsProps {
 }
 
 const FormedTeams: React.FC<FormedTeamsProps> = ({ distribution }) => {
+    const [showTooltip, setShowTooltip] = useState(false);
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('ru-RU');
@@ -64,6 +68,23 @@ const FormedTeams: React.FC<FormedTeamsProps> = ({ distribution }) => {
                     </div>
                     <div className="information-container-item">
                         <span className="information-container-item-span">Дата окончания проектов</span>
+                        <div 
+                            className="tooltip-container"
+                            onMouseEnter={() => setShowTooltip(true)}
+                            onMouseLeave={() => setShowTooltip(false)}
+                            onClick={() => setShowTooltip(!showTooltip)}
+                        >
+                            <img 
+                                src={questionIcon} 
+                                alt="Подсказка" 
+                                className="question-icon"
+                            />
+                                {showTooltip && (
+                                <div className="tooltip-content">
+                                    По наступлению даты окончания проектов распределение переходит из текущих в прошедшие
+                                </div>
+                            )}
+                        </div>
                         <div className="information-container-item-div">
                             {formatDate(distribution.team_expiry_date)}
                         </div>

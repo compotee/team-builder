@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import "./CreatingDistribution.css"
 import mockData from '../../../../Mocks';
+import questionIcon from "../../../../assets/question-icon.svg"
+
 
 interface Distribution {
   id: number;
@@ -37,6 +39,8 @@ const CreatingDistribution: React.FC<CreatingDistributionProps> = ({
   const [distributionTime, setDistributionTime] = useState(isEditMode ? distribution.auto_finish_time : '18:00');
   const [projectEndDate, setProjectEndDate] = useState(isEditMode ? distribution.team_expiry_date : '');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const availableRoles = mockData.Role || ['Тимлид', 'Аналитик', 'Дизайнер', 'Frontend-разработчик', 'Backend-разработчик'];
 
@@ -50,6 +54,19 @@ const CreatingDistribution: React.FC<CreatingDistributionProps> = ({
       setProjectEndDate(distribution.team_expiry_date);
     }
   }, [distribution, isEditMode]);
+
+  useEffect(() => {
+    if (showSuccessMessage) {
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+        if (onDistributionCreated) {
+          onDistributionCreated();
+        }
+      }, 2000); // 2 секунды
+      
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessMessage, onDistributionCreated]);
 
   const handleMembersCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isEditMode) return;
@@ -84,11 +101,6 @@ const CreatingDistribution: React.FC<CreatingDistributionProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (isEditMode) {
-      alert('Редактирование распределений недоступно в демо-режиме');
-      return;
-    }
-    
     setIsSubmitting(true);
 
     try {
@@ -117,16 +129,12 @@ const CreatingDistribution: React.FC<CreatingDistributionProps> = ({
 
       mockData.Distributions.push(newDistribution);
       
-      alert('Распределение успешно создано! Перейдите на вкладку "Текущие распределения"');
-      
-      // Вызываем callback для перехода на другую вкладку
-      if (onDistributionCreated) {
-        onDistributionCreated();
-      }
+      // Показываем сообщение об успехе
+      setShowSuccessMessage(true);
 
     } catch (error) {
       console.error('Ошибка при создании распределения:', error);
-      alert('Произошла ошибка при создании распределения');
+      // Можно показать сообщение об ошибке другим способом, если нужно
     } finally {
       setIsSubmitting(false);
     }
@@ -215,6 +223,23 @@ const CreatingDistribution: React.FC<CreatingDistributionProps> = ({
       
       <div className='creating-distribution-container_field'>
         <span className='creating-distribution-container_field-title'>Дата окончания проектов</span>
+        <div 
+            className="tooltip-container"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            onClick={() => setShowTooltip(!showTooltip)}
+          >
+            <img 
+              src={questionIcon} 
+              alt="Подсказка" 
+              className="question-icon"
+            />
+            {showTooltip && (
+              <div className="tooltip-content">
+                По наступлению даты окончания проектов распределение переходит из текущих в прошедшие
+              </div>
+            )}
+        </div>
         <input 
           className={`creating-distribution-container_field-input ${isEditMode ? 'disabled grey-input' : 'grey-input'}`}
           type="date" 
@@ -225,22 +250,25 @@ const CreatingDistribution: React.FC<CreatingDistributionProps> = ({
           readOnly={isEditMode}
         />
       </div>
+
+      <div className='password-save-div'>
+        {showSuccessMessage && (
+          <p style={{ color: '#005529'}}>
+            Распределение успешно запущено!
+          </p>
+        )}
       
-      {!isEditMode && (
-        <button 
-          type="submit"
-          className={`button ${isFormValid ? 'button--active' : 'button--inactive-pending'}`}
-          disabled={!isFormValid || isSubmitting}
-        >
-          {isSubmitting ? 'Создание...' : 'Запустить распределение'}
-        </button>
-      )}
-      
-      {isEditMode && (
-        <div className="view-mode-notice">
-          Режим просмотра. Редактирование недоступно.
+        <div>
+          <button 
+            type="submit"
+            className={`button ${isEditMode ? 'button--inactive' : (isFormValid ? 'button--active' : 'button--inactive-pending')}`}
+            disabled={isEditMode || !isFormValid || isSubmitting || showSuccessMessage}
+          >
+            {isSubmitting ? 'Создание...' : 
+            isEditMode ? 'Распределение запущено' : 'Запустить распределение'}
+          </button>
         </div>
-      )}
+      </div>
     </form>
   );
 };

@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import './Team.css'
 import copyIcon from '../../assets/copy-icon.svg'
+import checkIcon from '../../assets/checkmark-icon.svg' // Добавь эту иконку
 
 interface TeamMember {
   id: number;
@@ -13,10 +15,24 @@ interface TeamProps {
 }
 
 const Team = ({ teamMembers }: TeamProps) => {
+    const [copiedMemberId, setCopiedMemberId] = useState<number | null>(null);
+
+    // Таймер для скрытия галочки
+    useEffect(() => {
+        if (copiedMemberId !== null) {
+            const timer = setTimeout(() => {
+                setCopiedMemberId(null);
+            }, 1000); // Галочка показывается 2 секунды
+            
+            return () => clearTimeout(timer);
+        }
+    }, [copiedMemberId]);
+
     const handleCopy = async (member: TeamMember) => {
         try {
             await navigator.clipboard.writeText(member.telegram);
-            alert(`Никнейм ${member.telegram} скопирован в буфер обмена`);
+            // Устанавливаем ID скопированного участника
+            setCopiedMemberId(member.id);
         } catch (err) {
             console.error('Ошибка при копировании:', err);
         }
@@ -28,13 +44,16 @@ const Team = ({ teamMembers }: TeamProps) => {
             <div key={member.id} className='team-item'>
             <div className='team-item_role'>{member.role}</div>
             <p className='team-item_name'>{member.name}</p>
-            <p className='team-item_tg'>{member.telegram}</p>
+            <p className='team-item_tg'>@{member.telegram}</p>
             <button 
                 className='team-item_copy-btn'
                 onClick={() => handleCopy(member)}
-                title="Скопировать телеграм"
+                title={copiedMemberId === member.id ? "Скопировано!" : "Скопировать телеграм"}
             >
-                <img src={copyIcon} alt="Копировать"/>
+                <img 
+                    src={copiedMemberId === member.id ? checkIcon : copyIcon} 
+                    alt={copiedMemberId === member.id ? "Скопировано" : "Копировать"}
+                />
             </button>
             </div>
         ))}

@@ -311,7 +311,7 @@ export const User = {
   firstName: "Марина",
   middleName: "Александровна",
   lastName: "Попова",
-  username: "wunsha",
+  username: "wumsha",
   tgLink: "wunsha",
   password: "123456789",
   competence: Competence

@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import pencilIcon from "../../../assets/pencil-icon.svg";
 import checkmarkIcon from "../../../assets/checkmark-icon.svg";
+import mockData from '../../../Mocks';
 
 interface UserDataFormProps {
   userData: {
@@ -22,16 +23,41 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
   const middleNameRef = useRef<HTMLInputElement>(null);
   const loginRef = useRef<HTMLInputElement>(null);
 
+  // Автофокус при начале редактирования
+  useEffect(() => {
+    if (editingField === 'lastName' && lastNameRef.current) {
+      lastNameRef.current.focus();
+    } else if (editingField === 'firstName' && firstNameRef.current) {
+      firstNameRef.current.focus();
+    } else if (editingField === 'middleName' && middleNameRef.current) {
+      middleNameRef.current.focus();
+    } else if (editingField === 'login' && loginRef.current) {
+      loginRef.current.focus();
+    }
+  }, [editingField]);
+
   const startEditing = (fieldName: string, currentValue: string) => {
     setEditingField(fieldName);
     setTempValue(currentValue);
   };
 
   const saveField = (fieldKey: string) => {
-    // В демо-режиме просто показываем сообщение
-    alert('В демо-режиме редактирование данных недоступно');
-    
-    // Если нужно обновить UI без сохранения
+    // Обновляем моковые данные напрямую
+    switch(fieldKey) {
+      case 'last_name':
+        mockData.User.lastName = tempValue;
+        break;
+      case 'first_name':
+        mockData.User.firstName = tempValue;
+        break;
+      case 'middle_name':
+        mockData.User.middleName = tempValue;
+        break;
+      case 'tg_link':
+        mockData.User.tgLink = tempValue;
+        mockData.User.username = tempValue;
+        break;
+    }
     onUpdate();
     
     setEditingField(null);
@@ -57,7 +83,7 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
         </label>
         <input
           ref={ref}
-          className="personal-data-form_item-input grey-input"
+          className="personal-data-form_item-input"
           type="text"
           value={isEditing ? tempValue : value}
           onChange={handleFieldChange}
@@ -86,6 +112,9 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
     );
   };
 
+  // Создаем строку звездочек для пароля
+  const passwordStars = '*'.repeat(mockData.User.password.length);
+
   return (
     <div className="personal-data-form">
       {renderEditableField('Фамилия', 'lastName', 'last_name', userData.lastName, lastNameRef)}
@@ -98,9 +127,9 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
           Пароль
         </label>
         <input
-          className="personal-data-form_item-input grey-input"
+          className="personal-data-form_item-input"
           type="text"
-          value={userData.password}
+          value={passwordStars}
           readOnly
           id="password"
           name="password"
