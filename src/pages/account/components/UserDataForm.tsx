@@ -1,8 +1,7 @@
-import { useState, useRef } from 'react';
-
-
+import { useState, useRef, useEffect } from 'react';
 import pencilIcon from "../../../assets/pencil-icon.svg";
 import checkmarkIcon from "../../../assets/checkmark-icon.svg";
+import { api, type UpdateUserData } from '../../../api';
 
 interface UserDataFormProps {
   userData: {
@@ -18,11 +17,24 @@ interface UserDataFormProps {
 const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
   const [editingField, setEditingField] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   
   const lastNameRef = useRef<HTMLInputElement>(null);
   const firstNameRef = useRef<HTMLInputElement>(null);
   const middleNameRef = useRef<HTMLInputElement>(null);
   const loginRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editingField === 'lastName' && lastNameRef.current) {
+      lastNameRef.current.focus();
+    } else if (editingField === 'firstName' && firstNameRef.current) {
+      firstNameRef.current.focus();
+    } else if (editingField === 'middleName' && middleNameRef.current) {
+      middleNameRef.current.focus();
+    } else if (editingField === 'login' && loginRef.current) {
+      loginRef.current.focus();
+    }
+  }, [editingField]);
 
   const startEditing = (fieldName: string, currentValue: string) => {
     setEditingField(fieldName);
@@ -30,25 +42,32 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
   };
 
   const saveField = async (fieldKey: string) => {
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/user/profile', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          [fieldKey]: tempValue
-        })
-      });
-
-      if (response.ok) {
-        onUpdate();
+      const updateData: UpdateUserData = {};
+      
+      switch(fieldKey) {
+        case 'last_name':
+          updateData.lastName = tempValue;
+          break;
+        case 'first_name':
+          updateData.firstName = tempValue;
+          break;
+        case 'middle_name':
+          updateData.middleName = tempValue;
+          break;
+        case 'tg_link':
+          updateData.tgLink = tempValue;
+          break;
       }
-    } catch (error) {
-      console.error('Ошибка сохранения:', error);
-    } finally {
+      
+      await api.user.updateMe(updateData);
+      onUpdate();
       setEditingField(null);
+    } catch (error) {
+      console.error('Failed to update user data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -72,14 +91,14 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
         </label>
         <input
           ref={ref}
-          className="personal-data-form_item-input grey-input"
+          className="personal-data-form_item-input"
           type="text"
           value={isEditing ? tempValue : value}
           onChange={handleFieldChange}
           id={fieldName}
           name={fieldName}
           readOnly={!isEditing}
-          disabled={!isEditing}
+          disabled={!isEditing || isLoading}
         />
         <button
           type="button"
@@ -90,6 +109,7 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
               startEditing(fieldName, value);
             }
           }}
+          disabled={isLoading}
         >
           <img
             className='personal-data-form_item-img'
@@ -113,7 +133,7 @@ const UserDataForm = ({ userData, onUpdate }: UserDataFormProps) => {
           Пароль
         </label>
         <input
-          className="personal-data-form_item-input grey-input"
+          className="personal-data-form_item-input"
           type="text"
           value={userData.password}
           readOnly

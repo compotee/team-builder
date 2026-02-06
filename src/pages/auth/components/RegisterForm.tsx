@@ -1,10 +1,9 @@
 import { useState } from "react";
-
+import { useNavigate } from 'react-router-dom';
+import { api, type RegisterRequest } from '../../../api';
 import "./Form.css"
-
 import eyeOpenIcon from '../../../assets/eye-open.svg';
 import eyeClosedIcon from '../../../assets/eye-close.svg';
-
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +17,8 @@ const RegisterForm = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,38 +30,37 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     
+    if (formData.password !== formData.confirmPassword) {
+      setError("Пароли не совпадают");
+      return;
+    }
+    
+    setIsLoading(true);
+
     try {
-      const response = await fetch('http://77.222.37.36:8080/auth/signUp', {
-        method: 'POST',
-        credentials: 'include', 
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          middleName: formData.middleName,
-          lastName: formData.lastName,
-          username: formData.userName,
-          tgLink: formData.userName,
-          password: formData.password,
-          password_repeat: formData.confirmPassword,
-        })
-      });
+      const registerData: RegisterRequest = {
+        lastName: formData.lastName,
+        firstName: formData.firstName,
+        middleName: formData.middleName || undefined,
+        tgLink: formData.userName,
+        username: formData.userName,
+        password: formData.password,
+        password_repeat: formData.confirmPassword
+      };
 
-      const responseData = await response.json();
-      console.log('Ответ сервера:', responseData); 
-
-      if (!response.ok) {
-        throw new Error(responseData.message || `Ошибка ${response.status}`);
+      const response = await api.auth.register(registerData);
+      
+      if (response.success) {
+        navigate('/login', { state: { isLogin: true } });
+      } else {
+        setError(response.message || 'Ошибка при регистрации');
       }
-
-      
-      
-      window.location.href = '/main-page';
-    } catch (err) {
-      setError(`Ошибка запроса: ${err}`);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Ошибка при регистрации');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,6 +89,7 @@ const RegisterForm = () => {
         placeholder="Фамилия"
         value={formData.lastName}
         onChange={handleChange}
+        disabled={isLoading}
       />
       <input 
         className="form-input" 
@@ -97,14 +98,16 @@ const RegisterForm = () => {
         placeholder="Имя"
         value={formData.firstName}
         onChange={handleChange}
+        disabled={isLoading}
       />
       <input 
         className="form-input" 
         name="middleName"
         type="text" 
-        placeholder="Отчество (приналичии)"
+        placeholder="Отчество (при наличии)"
         value={formData.middleName}
         onChange={handleChange}
+        disabled={isLoading}
       />
       <input 
         className="form-input" 
@@ -113,6 +116,7 @@ const RegisterForm = () => {
         placeholder="Логин в телеграмм"
         value={formData.userName}
         onChange={handleChange}
+        disabled={isLoading}
       />
       <div className="password-input-wrapper">
         <input 
@@ -122,11 +126,13 @@ const RegisterForm = () => {
           placeholder="Пароль"
           value={formData.password}
           onChange={handleChange}
+          disabled={isLoading}
         />
         <button 
           type="button" 
           className="password-toggle-button"
           onClick={togglePasswordVisibility}
+          disabled={isLoading}
         >
           <img 
             src={showPassword ?  eyeOpenIcon : eyeClosedIcon}  
@@ -142,11 +148,13 @@ const RegisterForm = () => {
           placeholder="Повторите пароль"
           value={formData.confirmPassword}
           onChange={handleChange}
+          disabled={isLoading}
         />
         <button 
           type="button" 
           className="password-toggle-button"
           onClick={toggleConfirmPasswordVisibility }
+          disabled={isLoading}
         >
           <img 
             src={showConfirmPassword ?  eyeOpenIcon : eyeClosedIcon}  
@@ -157,8 +165,9 @@ const RegisterForm = () => {
       <button 
         className={isFormValid ? "button button--active" : "button button--inactive-pending"} 
         type="submit"
+        disabled={!isFormValid || isLoading}
       >
-        Зарегистрироваться
+        {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
       </button>
     </form>
   );

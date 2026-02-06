@@ -87,16 +87,53 @@
   padding: 16px;
   appearance: 'none';
   border-radius: 20px;
-  color: var(--color-dark-blue);
+  color: rgba(7, 17, 59, 0.5);
   background-color: var(--color-white);
+}
+
+.competencies-form_input:focus {
+  color: #07113B; 
+}
+
+.personal-data-form_item-input {
+    width: 100%;
+    padding: 16px;
+    appearance: 'none';
+    border-radius: 20px;
+    background-color: var(--color-grey);
+    color: rgba(7, 17, 59, 0.5);
+}
+
+.personal-data-form_item-input:focus {
+  color: #07113B; 
 }
 
 .competencies-form_select {
   width: 100%;
-  padding: 16px;
+  padding: 16px 40px 16px 16px;
   border-radius: 20px;
-  color: var(--color-dark-blue);
+  color: rgba(7, 17, 59, 0.5);
   background-color: var(--color-white);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='rgba(7, 17, 59, 0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.competencies-form_select:focus {
+  color: #07113B;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2307113B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Для disabled состояния */
+.competencies-form_select.disabled,
+.competencies-form_select:disabled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='rgba(7, 17, 59, 0.3)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 }
 
 .green-notification {
@@ -123,3 +160,24 @@
 .background-image {
     width: 100%;
 }
+
+.password-save-div {
+    margin-top: '20px';
+    display: flex;
+    gap: 20px; 
+    align-items: center;
+}
+
+.password-toggle-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+

@@ -12,5 +12,5 @@ export const api = {
 
 export type { RegisterRequest, LoginRequest } from './auth/types';
 export type { User, UpdateUserData, UpdatePasswordData } from './user/types';
-export type { Form, FormRole, Experience } from './form/types';
-export type { Distribution, Team, DistributionMember, Role, DistributionStatus } from './distributions/types';
+export type { Form, FormRole, Experience, UpdateFormData, CreateFormData } from './form/types';
+export type { Distribution, Team, DistributionMember, Role, DistributionStatus, TeamMember, CreateDistributionData } from './distributions/types';

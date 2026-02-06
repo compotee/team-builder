@@ -57,7 +57,7 @@
     width: fit-content;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 34px;
 }
 
 .teams-container-item {
@@ -72,4 +72,42 @@
 .teams-container-item-title {
     margin-bottom: 24px;
     font-size: var(--font-size-lg);
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.question-icon {
+  width: 48px;
+  height: 48px;
+  cursor: help;
+}
+
+.question-icon:hover {
+  opacity: 1;
+}
+
+.tooltip-content {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FFFFFF;
+  border: 1px solid #C5C7C8;
+  color: #000000;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 10px;
+  line-height: 1.4;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-bottom: 8px;
+  white-space: normal;
+  word-wrap: break-word;
 }

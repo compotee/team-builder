@@ -1,6 +1,8 @@
 .team-container {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    align-items: right;
     gap: 12px;
 }
 
@@ -18,5 +20,5 @@
 }
 
 .team-item_copy-btn:hover img {
-    stroke: var(--color-dark-blue); /* Черный цвет */
+    stroke: var(--color-dark-blue); 
 }

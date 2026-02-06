@@ -1,8 +1,6 @@
-import { useState } from 'react';
-
-
-import pencilIcon from "../../../assets/pencil-icon.svg";
+import { useState, useEffect } from 'react';
 import arrow from "../../../assets/arrow.svg";
+import { api, type CreateFormData, type UpdateFormData, type FormRole, type Experience } from '../../../api';
 
 interface Competence {
   id: number;
@@ -18,84 +16,161 @@ interface CompetenceFormProps {
 
 const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
   const [currentCompetenceIndex, setCurrentCompetenceIndex] = useState(0);
-  const [currentCompetence, setCurrentCompetence] = useState<Competence>({
-    id: 0,
-    role: '',
-    stack: '',
-    experience: ''
+  const [currentCompetence, setCurrentCompetence] = useState<Competence>({ 
+    id: 0, 
+    role: '', 
+    stack: '', 
+    experience: '' 
   });
+  const [originalCompetence, setOriginalCompetence] = useState<Competence | null>(null);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // При изменении списка компетенций или индекса обновляем текущую
-  useState(() => {
-    if (competences.length > 0 && currentCompetenceIndex < competences.length) {
-      setCurrentCompetence(competences[currentCompetenceIndex]);
-    } else {
-      setCurrentCompetence({ id: 0, role: '', stack: '', experience: '' });
+  useEffect(() => {
+    const updateState = () => {
+      if (competences.length > 0) {
+        if (currentCompetenceIndex < competences.length) {
+          const competence = competences[currentCompetenceIndex];
+          setCurrentCompetence(competence);
+          setOriginalCompetence(competence);
+          setIsAddingNew(false);
+        } else {
+          setCurrentCompetence({ 
+            id: 0, 
+            role: '', 
+            stack: '', 
+            experience: '' 
+          });
+          setOriginalCompetence(null);
+          setIsAddingNew(true);
+        }
+      } else {
+        setCurrentCompetence({ 
+          id: 0, 
+          role: '', 
+          stack: '', 
+          experience: '' 
+        });
+        setOriginalCompetence(null);
+        setIsAddingNew(true);
+      }
+    };
+
+    const timer = setTimeout(updateState, 0);
+    return () => clearTimeout(timer);
+  }, [competences, currentCompetenceIndex]);
+
+  useEffect(() => {
+    if (statusMessage) {
+      const timer = setTimeout(() => {
+        setStatusMessage('');
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  });
+  }, [statusMessage]);
 
-  const handleCompetenceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, field: keyof Competence) => {
-    const { value } = e.target;
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as FormRole;
     setCurrentCompetence(prev => ({
       ...prev,
-      [field]: value
+      role: value
+    }));
+  };
+
+  const handleStackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCurrentCompetence(prev => ({
+      ...prev,
+      stack: value
+    }));
+  };
+
+  const handleExperienceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as Experience;
+    setCurrentCompetence(prev => ({
+      ...prev,
+      experience: value
     }));
   };
 
   const saveCompetence = async () => {
-    try {
-      const response = await fetch('/api/user/competences', {
-        method: competences.length > 0 ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(currentCompetence)
-      });
+    if (!currentCompetence.role || !currentCompetence.stack || !currentCompetence.experience) {
+      return;
+    }
 
-      if (response.ok) {
-        onUpdate();
-        alert('Компетенция сохранена');
+    setIsLoading(true);
+    try {
+      const skillsArray = currentCompetence.stack.split(',').map(skill => skill.trim());
+      
+      if (isAddingNew) {
+        const createData: CreateFormData = {
+          role: currentCompetence.role as FormRole,
+          experience: currentCompetence.experience as Experience,
+          skills: skillsArray
+        };
+        await api.forms.create(createData);
+        setStatusMessage('Компетенция добавлена!');
+      } else {
+        const updateData: UpdateFormData = {
+          role: currentCompetence.role as FormRole,
+          experience: currentCompetence.experience as Experience,
+          skills: skillsArray
+        };
+        await api.forms.update(currentCompetence.id, updateData);
+        setStatusMessage('Компетенция сохранена!');
       }
+
+      if (isAddingNew) {
+        setTimeout(() => {
+          setCurrentCompetenceIndex(competences.length);
+        }, 0);
+      }
+
+      setTimeout(() => {
+        onUpdate();
+      }, 0);
     } catch (error) {
-      console.error('Ошибка сохранения компетенции:', error);
+      console.error('Failed to save competence:', error);
+      setStatusMessage('Ошибка при сохранении');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const deleteCompetence = async () => {
-    if (competences.length === 0) return;
+    if (competences.length === 0 || isAddingNew || !currentCompetence.id) return;
 
-    if (!window.confirm('Вы уверены, что хотите удалить компетенцию?')) {
-      return;
-    }
-
+    setIsLoading(true);
     try {
-      const response = await fetch(`/api/user/competences/${currentCompetence.id}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-
-      if (response.ok) {
+      await api.forms.delete(currentCompetence.id);
+      
+      const newIndex = Math.max(0, currentCompetenceIndex - 1);
+      setTimeout(() => {
+        setCurrentCompetenceIndex(newIndex);
+      }, 0);
+      
+      setTimeout(() => {
         onUpdate();
-      }
+      }, 0);
     } catch (error) {
-      console.error('Ошибка удаления компетенции:', error);
+      console.error('Failed to delete competence:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const nextCompetence = () => {
-    if (currentCompetenceIndex < competences.length - 1) {
-      const nextIndex = currentCompetenceIndex + 1;
-      setCurrentCompetenceIndex(nextIndex);
-      setCurrentCompetence(competences[nextIndex]);
-    }
+    setTimeout(() => {
+      setCurrentCompetenceIndex(prev => prev + 1);
+    }, 0);
   };
 
   const prevCompetence = () => {
     if (currentCompetenceIndex > 0) {
-      const prevIndex = currentCompetenceIndex - 1;
-      setCurrentCompetenceIndex(prevIndex);
-      setCurrentCompetence(competences[prevIndex]);
+      setTimeout(() => {
+        setCurrentCompetenceIndex(prev => prev - 1);
+      }, 0);
     }
   };
 
@@ -103,6 +178,24 @@ const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
     currentCompetence.role && 
     currentCompetence.stack && 
     currentCompetence.experience;
+
+  const hasChanges = !originalCompetence || 
+    currentCompetence.role !== originalCompetence.role ||
+    currentCompetence.stack !== originalCompetence.stack ||
+    currentCompetence.experience !== originalCompetence.experience;
+
+  const isSaveEnabled = isCompetenceValid && (isAddingNew || hasChanges);
+
+  const totalCount = isAddingNew ? competences.length + 1 : competences.length;
+
+  const roleOptions: FormRole[] = ['Тимлид', 'Аналитик', 'Дизайнер', 'Frontend-разработчик', 'Backend-разработчик'];
+  const experienceOptions: Experience[] = [
+    'Нет практического опыта',
+    'До полугода', 
+    'От полугода до года',
+    'Более одного года менее трёх лет',
+    'Более трёх лет'
+  ];
 
   return (
     <div className='competencies-form'>
@@ -112,79 +205,90 @@ const CompetenceForm = ({ competences, onUpdate }: CompetenceFormProps) => {
         name="role"
         className='competencies-form_item competencies-form_select'
         value={currentCompetence.role}
-        onChange={(e) => handleCompetenceChange(e, 'role')}
+        onChange={handleRoleChange}
+        disabled={isLoading}
       >
-        <option value="">Выберите роль</option>
-        <option value="Тимлид">Тимлид</option>
-        <option value="Аналитик">Аналитик</option>
-        <option value="Дизайнер">Дизайнер</option>
-        <option value="Frontend-разработчик">Frontend-разработчик</option>
-        <option value="Backend-разработчик">Backend-разработчик</option>
+        <option value="">Роль</option>
+        {roleOptions.map((role, index) => (
+          <option key={index} value={role}>{role}</option>
+        ))}
       </select>
 
       <div className="competencies-form_item">
         <input
           className="competencies-form_input"
           value={currentCompetence.stack}
-          onChange={(e) => handleCompetenceChange(e, 'stack')}
-          placeholder='Стэк'
+          onChange={handleStackChange}
+          placeholder='Стэк (через запятую)'
+          disabled={isLoading}
         />
-        <button>
-          <img src={pencilIcon} alt="Редактировать" />
-        </button>
       </div>
 
       <select
         name="experience"
         className='competencies-form_item competencies-form_select'
         value={currentCompetence.experience}
-        onChange={(e) => handleCompetenceChange(e, 'experience')}
+        onChange={handleExperienceChange}
+        disabled={isLoading}
       >
-        <option value="">Выберите опыт</option>
-        <option value="Меньше года">Меньше года</option>
-        <option value="1-3 года">1-3 года</option>
-        <option value="3-5 лет">3-5 лет</option>
-        <option value="Более 5 лет">Более 5 лет</option>
+        <option value="">Опыт</option>
+        {experienceOptions.map((exp, index) => (
+          <option key={index} value={exp}>{exp}</option>
+        ))}
       </select>
 
-      <div>
+      {statusMessage && (
+        <p style={{ color: '#004F10' }}>{statusMessage}</p>
+      )}
+
+      <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
         <button
-          className={`button ${isCompetenceValid ? 'button--active' : 'button--inactive-pending'} right-margin-btn`}
+          className={`button ${isSaveEnabled ? 'button--active' : 'button--inactive-pending'}`}
           onClick={saveCompetence}
-          disabled={!isCompetenceValid}
+          disabled={!isSaveEnabled || isLoading}
+          style={{ marginRight: '10px' }}
         >
-          Сохранить
+          {isLoading ? 'Сохранение...' : (isAddingNew ? 'Добавить' : 'Сохранить')}
         </button>
         
-        {competences.length > 0 && (
-          <button
-            className='button button--red'
-            onClick={deleteCompetence}
-          >
-            Удалить
-          </button>
-        )}
+        <button
+          className={`button button--red ${isAddingNew ? 'button--inactive-pending' : ''}`}
+          onClick={deleteCompetence}
+          disabled={isAddingNew || isLoading}
+        >
+          Удалить
+        </button>
       </div>
 
-      {competences.length > 0 && (
-        <div className='add-competence'>
-          <button
-            className='add-competence_btn'
-            onClick={prevCompetence}
-            disabled={currentCompetenceIndex === 0}
-          >
-            <img className='add-competence_btn-img' src={arrow} alt="Назад" />
-          </button>
-          {currentCompetenceIndex + 1}/{competences.length}
-          <button
-            className='add-competence_btn'
-            onClick={nextCompetence}
-            disabled={currentCompetenceIndex === competences.length - 1}
-          >
-            <img className='add-competence_btn-img add-competence_btn-img-right' src={arrow} alt="Вперед" />
-          </button>
-        </div>
-      )}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
+        <button
+          className='add-competence_btn'
+          onClick={prevCompetence}
+          disabled={currentCompetenceIndex === 0 || isLoading}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', width: '24px', height: '24px' }}
+        >
+          <img 
+            className='add-competence_btn-img' 
+            src={arrow} 
+            alt="Назад" 
+            style={{ width: '100%', height: '100%' }}
+          />
+        </button>
+        {currentCompetenceIndex + 1}/{totalCount}
+        <button
+          className='add-competence_btn'
+          onClick={nextCompetence}
+          disabled={isLoading}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', width: '24px', height: '24px' }}
+        >
+          <img 
+            className='add-competence_btn-img add-competence_btn-img-right' 
+            src={arrow} 
+            alt="Вперед" 
+            style={{ width: '100%', height: '100%', transform: 'rotate(180deg)' }}
+          />
+        </button>
+      </div>
     </div>
   );
 };

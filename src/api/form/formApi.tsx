@@ -19,7 +19,7 @@ export const formsApi = {
         return httpClient.put<Form>(`/form/${id}`, data);
     },
 
-        delete: (id: number): Promise<{ success: boolean; message: string }> => {
+    delete: (id: number): Promise<{ success: boolean; message: string }> => {
         return httpClient.delete(`/form/${id}`);
     }
 };

@@ -2,19 +2,11 @@ import { useState, useEffect } from 'react';
 import UserDataForm from './components/UserDataForm';
 import PasswordForm from './components/PasswordForm';
 import CompetenceForm from './components/CompetenceForm';
-
+import ConfirmModal from '../../components/confirm-modal/ConfirmModal';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../../api';
 import './Account.css';
-
-import  backgroundImg from '../../assets/account-page-img.svg'
-
-
-interface UserData {
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  login: string;
-  password: string;
-}
+import backgroundImg from '../../assets/account-page-img.svg'
 
 interface Competence {
   id: number;
@@ -23,160 +15,140 @@ interface Competence {
   experience: string;
 }
 
-
 const AccountPage = () => {
-    const [userData, setUserData] = useState<UserData>({
+    const [userData, setUserData] = useState({
         lastName: '',
         firstName: '',
         middleName: '',
         login: '',
-        password: '********'
+        password: ''
     });
 
     const [competences, setCompetences] = useState<Competence[]>([]);
+    const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState<'logout' | 'delete'>('logout');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const loadData = async () => {
+        const fetchData = async () => {
+            try {
+                const [userResponse, formsResponse] = await Promise.all([
+                    api.user.getMe(),
+                    api.forms.getAll()
+                ]);
+                
+                setUserData({
+                    lastName: userResponse.lastName || '',
+                    firstName: userResponse.firstName || '',
+                    middleName: userResponse.middleName || '',
+                    login: userResponse.tgLink || '',
+                    password: '********'
+                });
+                
+                const forms = formsResponse.forms.map(form => ({
+                    id: form.id,
+                    role: form.role,
+                    stack: form.skills.join(', '),
+                    experience: form.experience
+                }));
+                setCompetences(forms);
+            } catch (error) {
+                console.error('Failed to load data:', error);
+            }
+        };
+        
+        fetchData();
+    }, []);
+
+    const handleLogoutClick = () => {
+        setModalType('logout');
+        setShowModal(true);
+    };
+
+    const handleDeleteClick = () => {
+        setModalType('delete');
+        setShowModal(true);
+    };
+
+    const handleConfirm = () => {
+        if (modalType === 'logout') {
+            navigate('/auth');
+        } else {
+            navigate('/');
+        }
+        setShowModal(false);
+    };
+
+    const handleCancel = () => {
+        setShowModal(false);
+    };
+
+    const refetchData = async () => {
         try {
-            // Загружаем данные пользователя
-            const userResponse = await fetch('/api/user/profile', {
-            credentials: 'include'
-            });
-            if (userResponse.ok) {
-            const userData = await userResponse.json();
+            const [userResponse, formsResponse] = await Promise.all([
+                api.user.getMe(),
+                api.forms.getAll()
+            ]);
+            
             setUserData({
-                lastName: userData.last_name || '',
-                firstName: userData.first_name || '',
-                middleName: userData.middle_name || '',
-                login: userData.tg_link || userData.username || '',
+                lastName: userResponse.lastName || '',
+                firstName: userResponse.firstName || '',
+                middleName: userResponse.middleName || '',
+                login: userResponse.tgLink || '',
                 password: '********'
             });
-            }
-
-            const competencesResponse = await fetch('/api/user/competences', {
-            credentials: 'include'
-            });
-            if (competencesResponse.ok) {
-            const competencesData = await competencesResponse.json();
-            setCompetences(competencesData);
-            }
+            
+            const forms = formsResponse.forms.map(form => ({
+                id: form.id,
+                role: form.role,
+                stack: form.skills.join(', '),
+                experience: form.experience
+            }));
+            setCompetences(forms);
         } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
-        }};
-
-        loadData();
-    }, []); 
-
-    const handleLogout = async () => {
-        try {
-        const response = await fetch('/api/auth/logout', {
-            method: 'POST',
-            credentials: 'include'
-        });
-        
-        if (response.ok) {
-            window.location.href = '/login';
-        }
-        } catch (error) {
-        console.error('Ошибка выхода:', error);
+            console.error('Failed to refetch data:', error);
         }
     };
 
-    const handleDeleteProfile = async () => {
-
-        fetch("http://77.222.37.36:8080/split", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Accept": "application/json"
-        }})
-        .then(res => res.json())
-        .then(data => console.log(data))
-        .catch(err => console.error(err));
-
-        // if (!window.confirm('Вы уверены, что хотите удалить профиль?')) {
-        // return;
-        // }
-        
-        // try {
-        // const response = await fetch('/api/user/profile', {
-        //     method: 'DELETE',
-        //     credentials: 'include'
-        // });
-        
-        // if (response.ok) {
-        //     window.location.href = '/';
-        // }
-        // } catch (error) {
-        // console.error('Ошибка удаления профиля:', error);
-        // }
-    };
-
-    const updateUserData = async () => {
-        try {
-        const response = await fetch('/api/user/profile', {
-            credentials: 'include'
-        });
-        if (response.ok) {
-            const userData = await response.json();
-            setUserData({
-            lastName: userData.last_name || '',
-            firstName: userData.first_name || '',
-            middleName: userData.middle_name || '',
-            login: userData.tg_link || userData.username || '',
-            password: '********'
-            });
-        }
-        } catch (error) {
-        console.error('Ошибка обновления данных пользователя:', error);
-        }
-    };
-
-    const updateCompetences = async () => {
-        try {
-        const response = await fetch('/api/user/competences', {
-            credentials: 'include'
-        });
-        if (response.ok) {
-            const competencesData = await response.json();
-            setCompetences(competencesData);
-        }
-        } catch (error) {
-        console.error('Ошибка обновления компетенций:', error);
-        }
-    };
 
     return (
-        <div className='account-page-container'>
-            <div className='personal-data-container'>
-                <UserDataForm userData={userData} onUpdate={updateUserData} />
-                <PasswordForm />
-                <div>
-                    <button
-                        className='button button--red right-margin-btn'
-                        onClick={handleDeleteProfile}
-                    >
-                        Удалить профиль
-                    </button>
-                    <button
-                        className='button button--red'
-                        onClick={handleLogout}
-                    >
-                        Выйти из аккаунта
-                    </button>
+        <>
+            <div className='account-page-container'>
+                <div className='personal-data-container'>
+                    <UserDataForm userData={userData} onUpdate={refetchData} />
+                    <PasswordForm />
+                    <div>
+                        <button
+                            className='button button--red right-margin-btn'
+                            onClick={handleDeleteClick}
+                        >
+                            Удалить профиль
+                        </button>
+                        <button
+                            className='button button--red'
+                            onClick={handleLogoutClick}
+                        >
+                            Выйти из аккаунта
+                        </button>
                     </div>
                 </div>
-            <div className='competencies'>
-        <CompetenceForm 
-          competences={competences}
-          onUpdate={updateCompetences}
-        />
-        
-        <div className='background-image'>
-          <img src={backgroundImg} alt="" />
-        </div>
-      </div>
-    </div>
+                <div className='competencies'>
+                    <CompetenceForm 
+                        competences={competences}
+                        onUpdate={refetchData}
+                    />
+                    <div className='background-image'>
+                        <img src={backgroundImg} alt="" />
+                    </div>
+                </div>
+            </div>
+            <ConfirmModal
+                isOpen={showModal}
+                type={modalType}
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+            />
+        </>
     );
 };
 
