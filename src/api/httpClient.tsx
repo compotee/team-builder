@@ -1,4 +1,4 @@
-const API_BASE = 'http://77.222.37.36:8080';
+const API_BASE = '';
 
 class HttpClient {
   private baseUrl: string;
